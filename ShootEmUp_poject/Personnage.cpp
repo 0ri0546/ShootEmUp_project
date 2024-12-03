@@ -1,5 +1,5 @@
 #include "Personnage.hpp"
-#include "main.cpp"
+
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
@@ -9,7 +9,10 @@
 using namespace sf;
 
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 
 void Personnage::deplacement() {
     //Déplacement : Le personnage se déplace uniquement grâce au clic de la souris, dans un style hack n slash.

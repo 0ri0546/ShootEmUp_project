@@ -71,12 +71,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LibraryPath>C:\Users\orio6\Documents\SFML-2.6.2\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\Users\orio6\Documents\SFML-2.6.2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\jggui\OneDrive\Bureau\SFML-2.6.2\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\jggui\OneDrive\Bureau\SFML-2.6.2\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Users\orio6\Documents\SFML-2.6.2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\orio6\Documents\SFML-2.6.2\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\jggui\OneDrive\Bureau\SFML-2.6.2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\jggui\OneDrive\Bureau\SFML-2.6.2\lib;$(LibraryPath)</LibraryPath>
+    <PublicIncludeDirectories>C:\Users\jggui\OneDrive\Bureau\SFML-2.6.2\include;$(PublicIncludeDirectories)</PublicIncludeDirectories>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -137,7 +138,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+<<<<<<< Updated upstream
     <ClCompile Include="main.cpp" />
+=======
+    <ClCompile Include="EnnemiFaible.cpp" />
+    <ClCompile Include="EnnemiMoyen.cpp" />
+    <ClCompile Include="index.cpp" />
+    <ClCompile Include="Personnage.cpp" />
+    <ClCompile Include="PowerUp.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="EnnemiFaible.hpp" />
+    <ClInclude Include="EnnemiMoyen.hpp" />
+    <ClInclude Include="Personnage.hpp" />
+    <ClInclude Include="PowerUp.hpp" />
+>>>>>>> Stashed changes
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
