@@ -8,6 +8,7 @@
 #include <SFML/Audio.hpp>
 using namespace sf;
 
+Personnage::Personnage() {};
 
 void Personnage::deplacement() {
     //Déplacement : Le personnage se déplace uniquement grâce au clic de la souris, dans un style hack n slash.
@@ -20,7 +21,7 @@ void Personnage::ult() {
     //Saute sur les ennemis avec un gros marteau, fait des degats de zone. invincible durant cette période.
 
 }
-void Personnage::creerPieceRectangle(RectangleShape& rectangle,Color& color, int longueur, int largeur, int x, int y) {
+void Personnage::creerPieceRectangle(RectangleShape& rectangle,Color color, int longueur, int largeur, int x, int y) {
     rectangle.setSize(Vector2f(longueur, largeur));
     rectangle.setFillColor(color);
     rectangle.setOutlineColor(Color::Black);
