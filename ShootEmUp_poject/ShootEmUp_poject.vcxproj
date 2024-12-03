@@ -137,7 +137,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="EnnemiFaible.cpp" />
+    <ClCompile Include="EnnemiMoyen.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Personnage.cpp" />
+    <ClCompile Include="PowerUp.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="EnnemiFaible.hpp" />
+    <ClInclude Include="EnnemiMoyen.hpp" />
+    <ClInclude Include="Personnage.hpp" />
+    <ClInclude Include="PowerUp.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
