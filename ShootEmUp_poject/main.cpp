@@ -7,6 +7,7 @@ using namespace sf;
 
 
 int main() {
+<<<<<<< Updated upstream
     // Création de la fenêtre
     sf::RenderWindow window(sf::VideoMode(800, 600), "Fenêtre SFML");
 
@@ -29,6 +30,15 @@ int main() {
         // Afficher le contenu
         window.display();
     }
+=======
+    const int WIDTH = 1920;
+    const int HEIGHT = 1080;
+    sf::
+    
+    Jeu jeu;
+    jeu.boucleDeJeu();
+    
+>>>>>>> Stashed changes
 
     return 0;
 }
