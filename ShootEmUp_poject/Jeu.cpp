@@ -1,17 +1,18 @@
 #include "Jeu.hpp"
-#include <SFML/Graphics.hpp>
-#include <iostream>
-#include <string>
-#include <vector>
-#include <windows.h>
-#include <SFML/Audio.hpp>
+
+
 using namespace sf;
 using namespace std;
 
-void Jeu::boucleDeJeu() {
-    RenderWindow window(VideoMode(800, 600), "Mount Olympus");
 
-    personnage.creerPieceRectangle(joueur, Color::White, 50, 100, 50, 200);
+Jeu::Jeu(int score) : score(score) {
+    this->personnage = Personnage(3, 100, 0.0 , POSBASEX, POSBASEY);
+};
+
+void Jeu::boucleDeJeu() {
+    RenderWindow window(VideoMode(WIDTH, HEIGHT), "Mount Olympus");
+    personnage.creerPieceRectangle(joueur, Color::White, TAILLEX, TAILLEY, WIDTH / 2 - TAILLEX / 2, HEIGHT - 20 - TAILLEY / 2);
+    personnage.creerPieceRectangle(zoneDepl, Color::Red, WIDTH, HEIGHT / 2, 0, HEIGHT / 2); 
 
     while (window.isOpen()) {
         sf::Event event;
@@ -20,7 +21,10 @@ void Jeu::boucleDeJeu() {
                 window.close();
             }
         }
+        personnage.deplacement(joueur, event, window);
         window.clear();
+        window.setFramerateLimit(60);
+        window.draw(zoneDepl);
         window.draw(joueur);
         window.display();
     }

@@ -1,8 +1,12 @@
 #ifndef POWERUP_HPP
 #define POWERUP_HPP
-
+#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
+#include <vector>
+#include <windows.h>
+#include <SFML/Audio.hpp>
+
 
 using namespace std;
 
@@ -16,7 +20,7 @@ class PowerUp {
 	void bouclier(); //invincible pendant x secondes
 	void gel(); //arret du mouvement des ennemis
 
-	string getType() { return type; }
+	string getType();
 };
 
 #endif

@@ -4,7 +4,7 @@
 #include <vector>
 #include <windows.h>
 #include <SFML/Audio.hpp>
-#include "Personnage.hpp"
+
 #include "Jeu.hpp"
 
 using namespace std;
@@ -98,12 +98,13 @@ using namespace sf;
 //};
 
 
+
 int main() {
     const int WIDTH = 1920;
     const int HEIGHT = 1080;
     Texture texture;
     
-    Jeu jeu;
+    Jeu jeu(0);
     jeu.boucleDeJeu();
     
     return 0;

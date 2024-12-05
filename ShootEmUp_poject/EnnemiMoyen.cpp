@@ -1,10 +1,5 @@
 #include "EnnemiMoyen.hpp"
-#include <SFML/Graphics.hpp>
-#include <iostream>
-#include <string>
-#include <vector>
-#include <windows.h>
-#include <SFML/Audio.hpp>
+
 
 void EnnemiMoyen::deplacement() {
     //les ennemis se deplacent à l'horizontale

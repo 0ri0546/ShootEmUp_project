@@ -1,10 +1,5 @@
 #include "EnnemiFaible.hpp"
-#include <SFML/Graphics.hpp>
-#include <iostream>
-#include <string>
-#include <vector>
-#include <windows.h>
-#include <SFML/Audio.hpp>
+
 
 void EnnemiFaible::deplacement() {
     //les ennemis se deplacent en 'X'

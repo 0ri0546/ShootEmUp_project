@@ -75,8 +75,8 @@
     <IncludePath>C:\Users\orio6\Documents\SFML-2.6.2\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Users\orio6\Documents\SFML-2.6.2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\orio6\Documents\SFML-2.6.2\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\Telechargements\SFML-2.6.2-windows-vc17-64-bit\SFML-2.6.2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Telechargements\SFML-2.6.2-windows-vc17-64-bit\SFML-2.6.2\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -142,6 +142,7 @@
     <ClCompile Include="EnnemiMoyen.cpp" />
     <ClCompile Include="Jeu.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Munitions.cpp" />
     <ClCompile Include="Personnage.cpp" />
     <ClCompile Include="PowerUp.cpp" />
   </ItemGroup>
@@ -150,6 +151,7 @@
     <ClInclude Include="EnnemiFort.hpp" />
     <ClInclude Include="EnnemiMoyen.hpp" />
     <ClInclude Include="Jeu.hpp" />
+    <ClInclude Include="Munitions.hpp" />
     <ClInclude Include="Personnage.hpp" />
     <ClInclude Include="PowerUp.hpp" />
   </ItemGroup>
