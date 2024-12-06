@@ -1,7 +1,5 @@
 #include "EnnemiFort.hpp"
 
-
-
 void EnnemiFort::deplacement() {
     //les ennemis se deplacent en diagonale
 }

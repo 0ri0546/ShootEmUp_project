@@ -147,6 +147,7 @@
     <ClCompile Include="PowerUp.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Datas.hpp" />
     <ClInclude Include="EnnemiFaible.hpp" />
     <ClInclude Include="EnnemiFort.hpp" />
     <ClInclude Include="EnnemiMoyen.hpp" />

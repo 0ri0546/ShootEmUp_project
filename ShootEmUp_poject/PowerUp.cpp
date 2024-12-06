@@ -1,6 +1,5 @@
 #include "PowerUp.hpp"
 
-
 void PowerUp::cadenceDeTir() {
     //augmente les tirs par seconde
 }

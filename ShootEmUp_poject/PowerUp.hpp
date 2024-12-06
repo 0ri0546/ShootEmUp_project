@@ -7,13 +7,10 @@
 #include <windows.h>
 #include <SFML/Audio.hpp>
 
-
 using namespace std;
-
 
 class PowerUp {
 	string type;
-
 	void cadenceDeTir();  //augmente les tirs par seconde
 	void upChargeur(); //augmente la capacité du chargeur
 	void MultiShot(); //tire en diagonale

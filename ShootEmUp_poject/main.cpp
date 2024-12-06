@@ -15,31 +15,6 @@ using namespace sf;
 //vector<EnnemiFort> ennemisForts;
 //vector<PowerUp> bonusPersonnage;
 
-//class PowerUp {
-//private:
-//    string type;
-//public:
-//    void cadenceDeTir() {
-//        //augmente les tirs par seconde
-//    }
-//    void upChargeur() {
-//        //augmente la capacité du chargeur
-//    }
-//    void MultiShot() {
-//        //tire en diagonale
-//    }
-//    void bouclier() {
-//        //invincible pendant x secondes
-//    }
-//    void gel() {
-//        //arret du mouvement des ennemis
-//    }
-//
-//    string getType() { return type; }
-//};
-//
-//
-//
 //class poseidon {
 //private:
 //    int vies; 
@@ -97,13 +72,12 @@ using namespace sf;
 //    }
 //};
 
-
-
 int main() {
     const int WIDTH = 1920;
     const int HEIGHT = 1080;
-    Texture texture;
-    
+    using namespace std;
+    using namespace sf;
+
     Jeu jeu(0);
     jeu.boucleDeJeu();
     

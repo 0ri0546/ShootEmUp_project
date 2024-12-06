@@ -25,19 +25,45 @@ void Personnage::deplacement(RectangleShape& rectangle,Event event, RenderWindow
     //set le sprite de move pour une animation de deplacement
     Vector2i posMouse = Mouse::getPosition(window);
     
-    if (Mouse::isButtonPressed(Mouse::Left) && posMouse.x > 0 && posMouse.x < Jeu::WIDTH && posMouse.y < Jeu::HEIGHT) { 
+    if (Mouse::isButtonPressed(Mouse::Left) && posMouse.x > 0 && posMouse.x < WIDTH && posMouse.y < HEIGHT) {
         /*deplacerVers(rectangle, event, window);*/
-        rectangle.setPosition(posMouse.x - Jeu::TAILLEX / 2, max(posMouse.y - Jeu::TAILLEY / 2, Jeu::HEIGHT /2));
+        rectangle.setPosition(posMouse.x - TAILLEX / 2, max(posMouse.y - TAILLEY / 2, HEIGHT /2));
         cout << posMouse.x << ", " << posMouse.y << endl;
         cout << rectangle.getPosition().x <<", " << posMouse.y << endl << endl;
     }
 }
-void Personnage::attaque() {
+void Personnage::attaque(RectangleShape& rectangle, Event event, RenderWindow& window) {
+    Personnage personnage;
     //Tir automatique en maintenant une touche ou un bouton enfoncé jusqu'à ce que le nombre de charge soit vide.
+    
+    for (auto it = mun.begin(); it != mun.end(); ) {
+        cout << "lance" << endl;
+        Texture test;
+        test.loadFromFile("munition.png");
+        it->mun.setTexture(test);
+        window.draw(it->mun);
+        it->mun.move(0.f, -30.f);
+
+        if (it->mun.getPosition().y < 0) {
+            it = mun.erase(it);
+        }
+        else {
+            ++it;
+        }
+    }
+    /*for (auto& elem : mun) {
+        cout << elem.getPosX() << endl;
+    }*/
+    
 }
 void Personnage::ult() {
     //Saute sur les ennemis avec un gros marteau, fait des degats de zone. invincible durant cette période.
 
+}
+
+void Personnage::setTexture(RectangleShape& rectangle, const Texture *texture) {
+    //Saute sur les ennemis avec un gros marteau, fait des degats de zone. invincible durant cette période.
+    rectangle.setTexture(texture);
 }
 void Personnage::creerPieceRectangle(RectangleShape& rectangle,Color color, int longueur, int largeur, float x, float y) {
     rectangle.setSize(Vector2f(longueur, largeur));
@@ -46,6 +72,14 @@ void Personnage::creerPieceRectangle(RectangleShape& rectangle,Color color, int 
     rectangle.setOutlineThickness(3);
     rectangle.setPosition(x, y);
 }
+
+void Personnage::creerText(Text& text, const std::string& texte, int charSize, const sf::Color& color, float x, float y) {
+    text.setString(texte);
+    text.setCharacterSize(charSize);
+    text.setFillColor(color);
+    text.setPosition(x, y);
+}
+
 void Personnage::setVies(int nouvelleVie) { vies = nouvelleVie; }
 void Personnage::setMunitions(int nouvelleMunition) { munitions = nouvelleMunition; }
 void Personnage::setTauxUtlime(float NouveauTauxUlt) { tauxUtlime = NouveauTauxUlt; }

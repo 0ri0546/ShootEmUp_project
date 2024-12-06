@@ -1,6 +1,5 @@
 #include "EnnemiMoyen.hpp"
 
-
 void EnnemiMoyen::deplacement() {
     //les ennemis se deplacent à l'horizontale
 }

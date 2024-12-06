@@ -1,6 +1,5 @@
 #include "EnnemiFaible.hpp"
 
-
 void EnnemiFaible::deplacement() {
     //les ennemis se deplacent en 'X'
 }

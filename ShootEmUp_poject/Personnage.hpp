@@ -9,7 +9,8 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Window/Mouse.hpp>
 
-#include "Jeu.hpp"
+#include "Datas.hpp"
+#include "Munitions.hpp"
 
 using namespace std;
 using namespace sf;
@@ -21,12 +22,15 @@ class Personnage {
     float x, y;
     float speed = 1.0f;
 public:
+    vector<Munitions> mun;
+    Font font;
     Personnage();
     Personnage(int vies, int munitions, float tauxUltime, float x, float y);
     void deplacerVers(RectangleShape& rectangle, Event event, RenderWindow& window);
-    void deplacement(RectangleShape& rectangle,Event event, RenderWindow& window);
-    void attaque();
+    void deplacement(RectangleShape& rectangle, Event event, RenderWindow& window);
+    void attaque(RectangleShape& rectangle, Event event, RenderWindow& window);
     void ult();
+    void setTexture(RectangleShape& rectangle, const Texture *texture);
     void setVies(int nouvelleVie);
     void setMunitions(int nouvelleMunition);
     void setTauxUtlime(float NouveauTauxUlt);
@@ -34,6 +38,7 @@ public:
     int getMunitions();
     float getTauxUltime(); 
     void creerPieceRectangle(RectangleShape& rectangle,Color color, int longueur, int largeur, float x, float y);
+    void creerText(Text& text, const std::string& texte, int charSize, const sf::Color& color, float x, float y);
 };
 
 #endif
