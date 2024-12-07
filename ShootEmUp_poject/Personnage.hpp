@@ -24,9 +24,9 @@ class Personnage {
 public:
     vector<Munitions> mun;
     Font font;
+    
     Personnage();
     Personnage(int vies, int munitions, float tauxUltime, float x, float y);
-    void deplacerVers(RectangleShape& rectangle, Event event, RenderWindow& window);
     void deplacement(RectangleShape& rectangle, Event event, RenderWindow& window);
     void attaque(RectangleShape& rectangle, Event event, RenderWindow& window);
     void ult();

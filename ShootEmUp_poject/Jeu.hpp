@@ -23,7 +23,7 @@ public:
     Jeu(const int score);
     //Event event;
     Mouse mouse;
-    
+    Texture persoTexture;
     Personnage personnage;
     void boucleDeJeu();
 };
