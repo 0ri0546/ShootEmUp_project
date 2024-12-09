@@ -2,6 +2,7 @@
 
 using namespace sf;
 Keyboard keyboard;
+Font font;
 Personnage::Personnage() {
 };
 Personnage::Personnage(int vies, int munitions, float tauxUltime, float x, float y) : vies(vies), munitions(munitions), tauxUtlime(tauxUltime), x(x), y(y) {
@@ -24,7 +25,6 @@ void Personnage::deplacement(RectangleShape& rectangle, Event event, RenderWindo
             if (targetPosition.y < maxY) targetPosition.y = maxY;
         }
     }
-
     float deltaTime = clock.restart().asSeconds();
 
     Vector2f currentPosition = rectangle.getPosition();
@@ -40,17 +40,14 @@ void Personnage::deplacement(RectangleShape& rectangle, Event event, RenderWindo
     }
 }
 
-
-
 void Personnage::attaque(RectangleShape& rectangle, Event event, RenderWindow& window, int spriteAnimation) {
-    Personnage personnage;
     //Tir automatique en maintenant une touche ou un bouton enfoncé jusqu'à ce que le nombre de charge soit vide.
     
     for (auto it = mun.begin(); it != mun.end(); ) {
         Texture test;
 
         if (spriteAnimation <= 4) { test.loadFromFile("munition.png"); }
-        else { test.loadFromFile("hercule.png"); }
+        else { test.loadFromFile("munition2.png"); }
         it->mun.setTexture(test);
         
         window.draw(it->mun);
@@ -62,10 +59,19 @@ void Personnage::attaque(RectangleShape& rectangle, Event event, RenderWindow& w
     /*for (auto& elem : mun) {
         cout << elem.getPosX() << endl;
     }*/
-    
 }
-void Personnage::ult() {
+
+void Personnage::ult(RectangleShape& rectangle, Event event, RenderWindow& window) {
     //Saute sur les ennemis avec un gros marteau, fait des degats de zone. invincible durant cette période.
+    cout << "ultime !" << endl;
+    if (rectangle.getPosition().y > 20)
+    {
+        rectangle.move(0.f, -10.f);
+    }
+    else if (rectangle.getPosition().y <= 20)
+    {
+        // kill dans un rayon de 20
+    }
 
 }
 
@@ -81,11 +87,12 @@ void Personnage::creerPieceRectangle(RectangleShape& rectangle,Color color, int 
     rectangle.setPosition(x, y);
 }
 
-void Personnage::creerText(Text& text, const std::string& texte, int charSize, const sf::Color& color, float x, float y) {
+void Personnage::creerText(Text& text, const std::string& texte, int charSize, const sf::Color& color, float x, float y, Font& font) {
     text.setString(texte);
     text.setCharacterSize(charSize);
     text.setFillColor(color);
     text.setPosition(x, y);
+    text.setFont(font);
 }
 
 void Personnage::setVies(int nouvelleVie) { vies = nouvelleVie; }
@@ -95,3 +102,5 @@ void Personnage::setTauxUtlime(float NouveauTauxUlt) { tauxUtlime = NouveauTauxU
 int Personnage::getVies() { return vies; }
 int Personnage::getMunitions() { return munitions; }
 float Personnage::getTauxUltime() { return tauxUtlime; }
+float Personnage::getPositionX() { return x; }
+float Personnage::getPositionY() { return y; }

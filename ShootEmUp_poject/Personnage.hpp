@@ -19,9 +19,9 @@ class Personnage {
     int vies;
     int munitions;
     float tauxUtlime;
-    float x, y;
     float speed = 1.0f;
 public:
+    float x, y;
     vector<Munitions> mun;
     Font font;
     
@@ -29,7 +29,7 @@ public:
     Personnage(int vies, int munitions, float tauxUltime, float x, float y);
     void deplacement(RectangleShape& rectangle, Event event, RenderWindow& window);
     void attaque(RectangleShape& rectangle, Event event, RenderWindow& window, int spriteAnimation);
-    void ult();
+    void ult(RectangleShape& rectangle, Event event, RenderWindow& window);
     void setTexture(RectangleShape& rectangle, const Texture *texture);
     void setVies(int nouvelleVie);
     void setMunitions(int nouvelleMunition);
@@ -38,7 +38,9 @@ public:
     int getMunitions();
     float getTauxUltime(); 
     void creerPieceRectangle(RectangleShape& rectangle,Color color, int longueur, int largeur, float x, float y);
-    void creerText(Text& text, const std::string& texte, int charSize, const sf::Color& color, float x, float y);
+    void creerText(Text& text, const std::string& texte, int charSize, const sf::Color& color, float x, float y, Font& font);
+    float getPositionX();
+    float getPositionY();
 };
 
 #endif

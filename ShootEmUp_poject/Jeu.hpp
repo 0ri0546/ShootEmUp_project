@@ -7,6 +7,7 @@
 #include <vector>
 #include <windows.h>
 #include <SFML/Audio.hpp>
+#include <ctime>
 
 #include "Personnage.hpp"
 
@@ -23,7 +24,7 @@ public:
     Jeu(const int score);
     //Event event;
     Mouse mouse;
-    Texture persoTexture;
+    Texture persoTexture, viesTextureFull, viesTexture0, viesTexture1, viesTexture2;
     Personnage personnage;
     void boucleDeJeu();
 };
