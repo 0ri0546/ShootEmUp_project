@@ -9,6 +9,7 @@ Jeu::Jeu(int score) : score(score) {
 }
 
 void Jeu::boucleDeJeu() {
+    int spriteAnimation = 0;
     Text textMunitions;
     Sprite persoSprite;
     RenderWindow window(VideoMode(WIDTH, HEIGHT), "Mount Olympus");
@@ -41,11 +42,16 @@ void Jeu::boucleDeJeu() {
         persoSprite.setPosition(joueur.getPosition());
 
         window.clear();
-        window.setFramerateLimit(40);
+        window.setFramerateLimit(60);
 
         window.draw(zoneDepl);
         personnage.deplacement(joueur, event, window);
-        personnage.attaque(joueur, event, window);
+        personnage.attaque(joueur, event, window, spriteAnimation);
+        spriteAnimation++;
+        if (spriteAnimation == 10)
+        {
+            spriteAnimation = 0;
+        }
         window.draw(textMunitions);
         window.draw(persoSprite);
         window.display();

@@ -13,7 +13,7 @@ void Personnage::deplacement(RectangleShape& rectangle, Event event, RenderWindo
     static sf::Clock clock;
     float velocity = 200.f;
     const float stopThreshold = 5.f;
-    const float maxX = WIDTH; // Limite maximale en X
+    const float maxX = WIDTH; 
     const float maxY = HEIGHT / 2.f;
 
     if (Mouse::isButtonPressed(Mouse::Left)) {
@@ -36,30 +36,28 @@ void Personnage::deplacement(RectangleShape& rectangle, Event event, RenderWindo
         rectangle.move(direction * velocity * deltaTime); 
     }
     else {
-        rectangle.setPosition(targetPosition); // S'assure que la position finale est exacte
+        rectangle.setPosition(targetPosition);
     }
 }
 
 
 
-void Personnage::attaque(RectangleShape& rectangle, Event event, RenderWindow& window) {
+void Personnage::attaque(RectangleShape& rectangle, Event event, RenderWindow& window, int spriteAnimation) {
     Personnage personnage;
     //Tir automatique en maintenant une touche ou un bouton enfoncé jusqu'à ce que le nombre de charge soit vide.
     
     for (auto it = mun.begin(); it != mun.end(); ) {
-        cout << "lance" << endl;
         Texture test;
-        test.loadFromFile("munition.png");
-        it->mun.setTexture(test);
-        window.draw(it->mun);
-        it->mun.move(0.f, -30.f);
 
-        if (it->mun.getPosition().y < 0) {
-            it = mun.erase(it);
-        }
-        else {
-            ++it;
-        }
+        if (spriteAnimation <= 4) { test.loadFromFile("munition.png"); }
+        else { test.loadFromFile("hercule.png"); }
+        it->mun.setTexture(test);
+        
+        window.draw(it->mun);
+        it->mun.move(0.f, -10.f);
+
+        if (it->mun.getPosition().y < 0) { it = mun.erase(it); }
+        else { ++it; }
     }
     /*for (auto& elem : mun) {
         cout << elem.getPosX() << endl;
