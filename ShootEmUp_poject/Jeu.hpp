@@ -18,6 +18,7 @@ class Jeu {
 private:
     int score;
     RectangleShape joueur, zoneDepl, bg1, bg2, bg3;
+    CircleShape ultArea;
     time_t start, end;
     Text textMunitions, textVie, textUlt, textWave, textLevel, textRecharge;
     Sprite persoSprite, persoSpriteAtt, viesSpriteFull, viesSprite0, viesSprite1, viesSprite2;

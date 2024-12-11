@@ -31,6 +31,10 @@ void Jeu::boucleDeJeu() {
     string gameState = "jeu";
     bool premierTir = true;
     int dontMove = 0;
+    int ultState = 0;
+    Vector2f initialPosition = persoSprite.getPosition();
+    float ultScale = 1.0f;
+    Clock ultTimer; 
     Font fontMunition;
     fontMunition.loadFromFile("god.ttf");
     RenderWindow window(VideoMode(WIDTH, HEIGHT), "Mount Olympus");
@@ -67,17 +71,15 @@ void Jeu::boucleDeJeu() {
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
-            if (event.key.code == Keyboard::Space && personnage.getMunitions() > 0 && dontMove == 0) {
+            if (event.key.code == Keyboard::Space && personnage.getMunitions() > 0 && dontMove == 0 && ultState == 0) {
                 enAttaque++;
-                cout << "en attaque" << endl;
-                if (premierTir) { 
-                    start = time(nullptr); 
+                if (premierTir) {
+                    start = time(nullptr);
                     personnage.mun.push_back(Munitions(joueur.getPosition().x - TAILLEX / 2, joueur.getPosition().y));
-                    personnage.setMunitions(personnage.getMunitions() - 1); 
+                    personnage.setMunitions(personnage.getMunitions() - 1);
                 }
                 end = time(nullptr);
-                if (end - start > 0)
-                {
+                if (end - start > 0) {
                     premierTir = false;
                     personnage.mun.push_back(Munitions(joueur.getPosition().x - TAILLEX / 2, joueur.getPosition().y));
                     personnage.setMunitions(personnage.getMunitions() - 1);
@@ -85,86 +87,79 @@ void Jeu::boucleDeJeu() {
                 else { premierTir = false; }
                 start = time(nullptr);
             }
-            if (event.key.code == Keyboard::R)
-            {
+            if (event.key.code == Keyboard::R && ultState == 0) {
                 personnage.setMunitions(31);
                 dontMove++;
                 cout << "recharge" << endl;
             }
-            int vieTemp = personnage.getVies();
+            if (event.key.code == Keyboard::U && ultState == 0) { 
+                gameState = "ult";
+                ultState = 1;
+                ultTimer.restart();
+                initialPosition = persoSprite.getPosition();
+            }
         }
 
-        if (gameState == "jeu")
-        {
-            persoSprite.setPosition(joueur.getPosition());
-            persoSpriteAtt.setPosition(joueur.getPosition());
+        if (gameState == "ult") {
+            if (ultState == 1) {
+                persoSprite.move(0.0f, -15.0f);
+                if (persoSprite.getPosition().y <= TAILLEY) { ultState = 2; }
+            }
+            if (ultState == 2) { 
+                ultArea.setOutlineColor(Color::Red);
+                ultArea.setOutlineThickness(5); 
+                ultArea.setFillColor(Color::Transparent); 
+                ultArea.setPosition(persoSprite.getPosition().x - ultArea.getRadius() + TAILLEX/2,
+                    persoSprite.getPosition().y - ultArea.getRadius() + TAILLEY/2);
+                ultArea.setRadius(100.f);
+                if (ultTimer.getElapsedTime().asSeconds() >= 1.0f) { ultState = 3; }
+            }
+
+            else if (ultState == 3) { 
+                persoSprite.setPosition(initialPosition);
+                ultState = 0;
+                gameState = "jeu";
+                
+            }
         }
-        else if (gameState == "ult")
-        {
-            // le personnage avance de 150 et s'agrandissant, puis avance de 150 en gardant cette taille. puis sa taille reduit pour revenir à sa taille normale, et reviens à sa position initiale
-        }
-        
+
+        if (gameState == "jeu") { persoSprite.setPosition(joueur.getPosition()); persoSpriteAtt.setPosition(joueur.getPosition()); }
+
         window.clear();
         window.setFramerateLimit(60);
+
         window.draw(bg1Sprite);
         window.draw(bg2Sprite);
         window.draw(bg3Sprite);
-        /*window.draw(zoneDepl);*/
-        personnage.creerText(textRecharge, "EN RECHARGE", 40, Color::Black, WIDTH - WIDTH / 3 + 40, HEIGHT - 170, fontMunition);
-        if (dontMove >= 150) { dontMove = 0; }
-        if (dontMove != 0) { dontMove++; window.draw(textRecharge); }
-        if (gameState == "jeu") { 
-            personnage.deplacement(joueur, event, window);   
-            personnage.attaque(joueur, event, window, spriteAnimation);
-            
+
+        personnage.creerText(textRecharge, "EN RECHARGE", 30, Color::Black, WIDTH - WIDTH / 3 + 70, HEIGHT - 150, fontMunition);
+        if (dontMove >= 150) dontMove = 0;
+        if (dontMove != 0) {
+            dontMove++;
+            window.draw(textRecharge);
         }
+        if (gameState == "jeu") { personnage.deplacement(joueur, event, window); personnage.attaque(joueur, event, window, spriteAnimation); }
+
         spriteAnimation++;
-        if (spriteAnimation == 70) { spriteAnimation = 0; }
+        if (spriteAnimation == 70) spriteAnimation = 0;
+
         string munitionsTexte = "Munitions : " + to_string(personnage.getMunitions());
+        personnage.creerText(textMunitions, munitionsTexte, 30, Color::Black, WIDTH - WIDTH / 3 + 70, HEIGHT - 70, fontMunition);
+        personnage.creerText(textUlt, "Ultime : %", 30, Color::Black, WIDTH - WIDTH / 3 + 70, HEIGHT - 110, fontMunition);
 
-        personnage.creerText(textMunitions, munitionsTexte, 40, Color::Black, WIDTH - WIDTH / 3 + 40, HEIGHT - 70, fontMunition);
+        if (enAttaque > 0) { window.draw(persoSpriteAtt); enAttaque++; }
+        if (enAttaque >= 20) { enAttaque = 0;  window.draw(persoSprite); }
 
-        
-        if (enAttaque > 0) // ------------------------------------------------------------------------
-        {
-            window.draw(persoSpriteAtt);
-            enAttaque++;
-        }
-        if (enAttaque >= 20)
-        {
-            enAttaque = 0;
-            window.draw(persoSprite);
-        }
-        
-        cout << enAttaque << endl;
-        if (personnage.getVies() == 3) {
-            viesSpriteFull.setPosition(Vector2f(joueur.getPosition().x - 20, joueur.getPosition().y + TAILLEY - 30));
-            window.draw(viesSpriteFull);
-        }
-        else if (personnage.getVies() == 2) {
-            viesSprite2.setPosition(Vector2f(joueur.getPosition().x - 20, joueur.getPosition().y + TAILLEY - 30));
-            window.draw(viesSprite2);
-        }
-        else if (personnage.getVies() == 1) {
-            viesSprite1.setPosition(Vector2f(joueur.getPosition().x - 20, joueur.getPosition().y + TAILLEY - 30));
-            window.draw(viesSprite1);
-        }
-        else {
-            viesSprite0.setPosition(Vector2f(joueur.getPosition().x - 20, joueur.getPosition().y + TAILLEY - 30));
-            window.draw(viesSprite0);
-        }
-        if (true)
-        {
-
-        }
         window.draw(persoSprite);
         window.draw(textMunitions);
+        window.draw(textUlt);
 
         moveBg(bg2Sprite, 0.0f, -0.5f);
-        if (bg2Sprite.getPosition().y > 0) { bg2Sprite.setPosition(Vector2f(0, -HEIGHT)); }
+        if (bg2Sprite.getPosition().y > 0) bg2Sprite.setPosition(Vector2f(0, -HEIGHT));
         moveBg(bg3Sprite, 0.0f, -2.0f);
-        if (bg3Sprite.getPosition().y > 0) { bg3Sprite.setPosition(Vector2f(0, -HEIGHT)); }
-
+        if (bg3Sprite.getPosition().y > 0) bg3Sprite.setPosition(Vector2f(0, -HEIGHT));
+        if (ultState == 2) { window.draw(ultArea); }
         window.display();
     }
 }
+
