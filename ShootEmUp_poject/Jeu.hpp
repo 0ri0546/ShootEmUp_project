@@ -17,16 +17,20 @@ using namespace sf;
 class Jeu {
 private:
     int score;
-    RectangleShape joueur, zoneDepl;
+    RectangleShape joueur, zoneDepl, bg1, bg2, bg3;
+    time_t start, end;
+    Text textMunitions, textVie, textUlt, textWave, textLevel, textRecharge;
+    Sprite persoSprite, persoSpriteAtt, viesSpriteFull, viesSprite0, viesSprite1, viesSprite2;
+    Texture persoTexture, persoTextureAtt, viesTextureFull, viesTexture0, viesTexture1, viesTexture2, bg1Texture, bg2Texture, bg3Texture;
+    Mouse mouse;
+    Personnage personnage;
+    int enAttaque = 0;
 
 public:
-    
     Jeu(const int score);
-    //Event event;
-    Mouse mouse;
-    Texture persoTexture, viesTextureFull, viesTexture0, viesTexture1, viesTexture2;
-    Personnage personnage;
     void boucleDeJeu();
+    void resize(Texture& texture, Sprite& sprite, float scaleX, float scaleY);
+    void moveBg(Sprite& sprite, float speedX, float speedY);
 };
 
 #endif

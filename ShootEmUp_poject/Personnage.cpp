@@ -40,25 +40,30 @@ void Personnage::deplacement(RectangleShape& rectangle, Event event, RenderWindo
     }
 }
 
-void Personnage::attaque(RectangleShape& rectangle, Event event, RenderWindow& window, int spriteAnimation) {
+bool Personnage::attaque(RectangleShape& rectangle, Event event, RenderWindow& window, int spriteAnimation) {
     //Tir automatique en maintenant une touche ou un bouton enfoncé jusqu'à ce que le nombre de charge soit vide.
-    
     for (auto it = mun.begin(); it != mun.end(); ) {
         Texture test;
 
-        if (spriteAnimation <= 4) { test.loadFromFile("munition.png"); }
-        else { test.loadFromFile("munition2.png"); }
+        if (spriteAnimation <= 10) { test.loadFromFile("fleche1.png"); }
+        else if (spriteAnimation <= 20) { test.loadFromFile("fleche2.png"); }
+        else if (spriteAnimation <= 30) { test.loadFromFile("fleche3.png"); }
+        else if (spriteAnimation <= 40) { test.loadFromFile("fleche4.png"); }
+        else if (spriteAnimation <= 50) { test.loadFromFile("fleche5.png"); }
+        else if (spriteAnimation <= 60) { test.loadFromFile("fleche6.png"); }
+        else if (spriteAnimation <= 70) { test.loadFromFile("fleche7.png"); }
         it->mun.setTexture(test);
         
         window.draw(it->mun);
         it->mun.move(0.f, -10.f);
 
-        if (it->mun.getPosition().y < 0) { it = mun.erase(it); }
+        if (it->mun.getPosition().y + test.getSize().y + 20 < 0) { it = mun.erase(it); }
         else { ++it; }
     }
     /*for (auto& elem : mun) {
         cout << elem.getPosX() << endl;
     }*/
+    return true;
 }
 
 void Personnage::ult(RectangleShape& rectangle, Event event, RenderWindow& window) {
@@ -72,7 +77,6 @@ void Personnage::ult(RectangleShape& rectangle, Event event, RenderWindow& windo
     {
         // kill dans un rayon de 20
     }
-
 }
 
 void Personnage::setTexture(RectangleShape& rectangle, const Texture *texture) {

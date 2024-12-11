@@ -143,6 +143,7 @@
     <ClCompile Include="Jeu.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Munitions.cpp" />
+    <ClCompile Include="Obstacle.cpp" />
     <ClCompile Include="Personnage.cpp" />
     <ClCompile Include="PowerUp.cpp" />
   </ItemGroup>
@@ -153,6 +154,7 @@
     <ClInclude Include="EnnemiMoyen.hpp" />
     <ClInclude Include="Jeu.hpp" />
     <ClInclude Include="Munitions.hpp" />
+    <ClInclude Include="Obstacle.hpp" />
     <ClInclude Include="Personnage.hpp" />
     <ClInclude Include="PowerUp.hpp" />
   </ItemGroup>

@@ -28,7 +28,7 @@ public:
     Personnage();
     Personnage(int vies, int munitions, float tauxUltime, float x, float y);
     void deplacement(RectangleShape& rectangle, Event event, RenderWindow& window);
-    void attaque(RectangleShape& rectangle, Event event, RenderWindow& window, int spriteAnimation);
+    bool attaque(RectangleShape& rectangle, Event event, RenderWindow& window, int spriteAnimation);
     void ult(RectangleShape& rectangle, Event event, RenderWindow& window);
     void setTexture(RectangleShape& rectangle, const Texture *texture);
     void setVies(int nouvelleVie);

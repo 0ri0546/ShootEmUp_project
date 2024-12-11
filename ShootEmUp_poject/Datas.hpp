@@ -12,7 +12,6 @@
 
 using namespace std;
 using namespace sf;
-
 const static int WIDTH = 1000;
 const static int HEIGHT = 800;
 const static int TAILLEX = 60;
