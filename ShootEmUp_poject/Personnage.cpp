@@ -41,7 +41,6 @@ void Personnage::deplacement(RectangleShape& rectangle, Event event, RenderWindo
 }
 
 bool Personnage::attaque(RectangleShape& rectangle, Event event, RenderWindow& window, int spriteAnimation) {
-    //Tir automatique en maintenant une touche ou un bouton enfoncé jusqu'à ce que le nombre de charge soit vide.
     for (auto it = mun.begin(); it != mun.end(); ) {
         Texture test;
 

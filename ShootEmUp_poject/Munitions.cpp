@@ -3,10 +3,10 @@
 using namespace std;
 
 Munitions::Munitions(float posX, float posY) {
-    textureMun.loadFromFile("fleche1.png");
-    mun.setTexture(textureMun);
+    
+    
     mun.setPosition(posX + TAILLEX / 2, posY);
-    mun.setScale(Vector2f(3.f, 3.f));
+    mun.setScale(Vector2f(1.5f, 1.5f));
     speed = 1.f;
 }
 void Munitions::move() {
