@@ -18,17 +18,17 @@ using namespace sf;
 class Jeu {
 private:
     int score;
-    RectangleShape joueur, zoneDepl, bg1, bg2, bg3;
+    RectangleShape joueur, zoneDepl, bg1, bg2, bg3, rectangleRecharge, rectangleMunitions, rectangleMunitionsOutLine;
     CircleShape ultArea;
     time_t start, end;
     Text textMunitions, textVie, textUlt, textWave, textLevel, textRecharge;
-    Sprite persoSprite, persoSpriteAtt, viesSpriteFull, viesSprite0, viesSprite1, viesSprite2;
-    Texture persoTexture, persoTextureAtt, viesTextureFull, viesTexture0, viesTexture1, viesTexture2, bg1Texture, bg2Texture, bg3Texture, hermesText;
+    Sprite persoSprite, persoSpriteAtt, viesSpriteFull, viesSprite0, viesSprite1, viesSprite2, ultSprite;
+    Texture persoTexture, persoTextureAtt, viesTextureFull, viesTexture0, viesTexture1, viesTexture2, bg1Texture, bg2Texture, bg3Texture, hermesText, ultTexture;
     Mouse mouse;
     Personnage personnage;
     int enAttaque = 0;
     int enAttaquePerso = 0;
-
+    int ultime = 50;
 public:
     Jeu(const int score);
     void boucleDeJeu();
