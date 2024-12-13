@@ -14,13 +14,15 @@ Jeu::Jeu(int score) : score(score) {
     if (!bg1Texture.loadFromFile("bg1.png")) {}
     if (!bg2Texture.loadFromFile("bg2.png")) {}
     if (!bg3Texture.loadFromFile("bg3.png")) {}
-    if (!bg3Texture.loadFromFile("ult1.png")) {}
-    if (!bg3Texture.loadFromFile("bg3.png")) {}
-    if (!bg3Texture.loadFromFile("bg3.png")) {}
-    if (!bg3Texture.loadFromFile("bg3.png")) {}
-    if (!bg3Texture.loadFromFile("bg3.png")) {}
-    if (!bg3Texture.loadFromFile("bg3.png")) {}
-    if (!bg3Texture.loadFromFile("bg3.png")) {}
+    if (ultime == 0) {}
+    else if (ultime <= 12.5) { if (!ultTexture.loadFromFile("ult8.png")) {} }
+    else if (ultime <= 25.0) { if (!ultTexture.loadFromFile("ult7.png")) {} }
+    else if (ultime <= 37.5) { if (!ultTexture.loadFromFile("ult6.png")) {} }
+    else if (ultime <= 50.0) { if (!ultTexture.loadFromFile("ult5.png")) {} }
+    else if (ultime <= 62.5) { if (!ultTexture.loadFromFile("ult4.png")) {} }
+    else if (ultime <= 75.0) { if (!ultTexture.loadFromFile("ult3.png")) {} }
+    else if (ultime <= 87.5) { if (!ultTexture.loadFromFile("ult2.png")) {} }
+    else if (ultime <= 100.5) { if (!ultTexture.loadFromFile("ult1.png")) {} }
     if (!hermesText.loadFromFile("Kratosidle.png")) {}
 }
 void Jeu::resize(Texture& texture, Sprite& sprite, float scaleX, float scaleY) {
@@ -60,11 +62,12 @@ void Jeu::boucleDeJeu() {
     resize(viesTexture1, viesSprite1, 100.0f, 70.0f);
     resize(viesTexture2, viesSprite2, 100.0f, 70.0f);
     resize(persoTexture, persoSprite, 60.0f, 70.0f);
-
+    resize(ultTexture, ultSprite, 100.0f, 100.0f);
     resize(persoTextureAtt, persoSpriteAtt, 60.0f, 70.0f);
 
     persoSprite.setPosition(POSBASEX, POSBASEY);
     persoSpriteAtt.setPosition(POSBASEX, POSBASEY);
+    ultSprite.setPosition(20, HEIGHT - 120 );
 
     personnage.creerPieceRectangle(joueur, Color::White, TAILLEX, TAILLEY, POSBASEX, POSBASEY);
     personnage.creerPieceRectangle(zoneDepl, Color::Green, WIDTH, HEIGHT / 2, 0, HEIGHT / 2);
@@ -124,7 +127,7 @@ void Jeu::boucleDeJeu() {
             if (Game == "ult") {
                 if (ultState == 1) {
                     persoSprite.move(0.0f, -15.0f);
-                    if (persoSprite.getPosition().y <= TAILLEY) { ultState = 2; }
+                    if (persoSprite.getPosition().y <= TAILLEY + 20) { ultState = 2; }
                 }
                 if (ultState == 2) {
                     ultArea.setOutlineColor(Color::Red);
