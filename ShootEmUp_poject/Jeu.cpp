@@ -24,12 +24,31 @@ Jeu::Jeu(int score) : score(score) {
     else if (ultime <= 87.5) { if (!ultTexture.loadFromFile("ult2.png")) {} }
     else if (ultime <= 100.5) { if (!ultTexture.loadFromFile("ult1.png")) {} }
     if (!hermesText.loadFromFile("Kratosidle.png")) {}
+    if (!dgtultTexture.loadFromFile("dgtult.png")) {}
 }
 void Jeu::resize(Texture& texture, Sprite& sprite, float scaleX, float scaleY) {
     sprite.setTexture(texture);
     float scaleFinaleX = scaleX / texture.getSize().x;
     float scaleFinaleY = scaleY / texture.getSize().y;
     sprite.setScale(scaleFinaleX, scaleFinaleY);
+}
+
+void Jeu::depEnnemis(vector<Hermes>::iterator it, bool& firstDep) {
+    
+    if (it->hermes.getPosition().y <= 40 && !firstDep)
+    {
+        cout << "test";
+        it->hermes.move(-3.f, 2.f);
+    }
+    else if (it->hermes.getPosition().x >= WIDTH - 150)
+    {
+        firstDep = false;
+        it->hermes.move(0.f, -3.f);
+    } else if (firstDep)
+    {
+        it->hermes.move(3.f, 2.f);
+    }
+
 }
 
 void Jeu::moveBg(Sprite& sprite, float speedX, float speedY) {
@@ -54,7 +73,7 @@ void Jeu::boucleDeJeu() {
     GameState gameState = GameState::Jeu;
 
     for (int i = 0; i < 10; ++i) {
-        hermes.push_back(Hermes(rand() % WIDTH, 0, hermesText));
+        hermes.push_back(Hermes(i * 50 -500, i*30 - 600, hermesText));
     }
 
     resize(viesTextureFull, viesSpriteFull, 100.0f, 70.0f);
@@ -64,6 +83,7 @@ void Jeu::boucleDeJeu() {
     resize(persoTexture, persoSprite, 60.0f, 70.0f);
     resize(ultTexture, ultSprite, 100.0f, 100.0f);
     resize(persoTextureAtt, persoSpriteAtt, 60.0f, 70.0f);
+    resize(dgtultTexture, dgtultSprite, 150.0f, 150.0f);
 
     persoSprite.setPosition(POSBASEX, POSBASEY);
     persoSpriteAtt.setPosition(POSBASEX, POSBASEY);
@@ -130,7 +150,8 @@ void Jeu::boucleDeJeu() {
                     if (persoSprite.getPosition().y <= TAILLEY + 20) { ultState = 2; }
                 }
                 if (ultState == 2) {
-                    ultArea.setOutlineColor(Color::Red);
+                    dgtultSprite.setPosition(persoSprite.getPosition().x - 120 / 2, // -----------------------------------------------------------
+                        persoSprite.getPosition().y );
                     ultArea.setOutlineThickness(5);
                     ultArea.setFillColor(Color::Transparent);
                     ultArea.setPosition(persoSprite.getPosition().x - ultArea.getRadius() + TAILLEX / 2,
@@ -183,17 +204,18 @@ void Jeu::boucleDeJeu() {
             if (enAttaque > 0) { window.draw(persoSpriteAtt); enAttaque++; }
             if (enAttaque >= 20) { enAttaque = 0;  window.draw(persoSprite); }
 
-            window.draw(persoSprite);
+            
             window.draw(textMunitions);
             window.draw(textUlt);
             for (auto it = hermes.begin(); it != hermes.end();) {
                 if (enAttaquePerso == 1) {
                     it->attaque(joueur, window, spriteAnimation);
                 }
-
                 window.draw(it->hermes);
 
-                it->hermes.move(rand() % 3, 3.f);
+
+                depEnnemis(it, firstDep);
+                //------------------------------------------------------------------------------------------------
                 if (enAttaquePerso == 1) {
                     it->attaque(joueur, window, spriteAnimation);
 
@@ -218,7 +240,8 @@ void Jeu::boucleDeJeu() {
             if (bg2Sprite.getPosition().y > 0) bg2Sprite.setPosition(Vector2f(0, -HEIGHT));
             moveBg(bg3Sprite, 0.0f, -2.0f);
             if (bg3Sprite.getPosition().y > 0) bg3Sprite.setPosition(Vector2f(0, -HEIGHT * 2));
-            if (ultState == 2) { window.draw(ultArea); }
+            if (ultState == 2) { window.draw(dgtultSprite); }
+            window.draw(persoSprite);
             window.display();
         }
     }
