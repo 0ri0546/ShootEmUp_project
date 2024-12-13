@@ -10,67 +10,7 @@
 using namespace std;
 using namespace sf;
 
-//vector<EnnemiFaible> ennemisFaibles;
-//vector<EnnemiMoyen> ennemisMoyens;
-//vector<EnnemiFort> ennemisForts;
-//vector<PowerUp> bonusPersonnage;
 
-//class poseidon {
-//private:
-//    int vies; 
-//public:
-//    void deplacement() {
-//        //
-//    }
-//    void attaque() {
-//        //
-//    }
-//};
-//class Ares {
-//private:
-//    int vies;
-//public:
-//    void deplacement() {
-//        //
-//    }
-//    void attaque() {
-//        //
-//    }
-//};
-//class Hades {
-//private:
-//    int vies;
-//public:
-//    void deplacement() {
-//        //
-//    }
-//    void attaque() {
-//        //
-//    }
-//};
-//class Zeus {
-//private:
-//    int vies;
-//public:
-//    void deplacement() {
-//        //
-//    }
-//    void attaque() {
-//        //
-//    }
-//};
-//
-//class Kratos {
-//private:
-//    int vies;
-//public:
-//    void deplacement() {
-//        //
-//    }
-//    void attaque() {
-//        //
-//    }
-//};
 
 int main() {
     const int WIDTH = 1920;

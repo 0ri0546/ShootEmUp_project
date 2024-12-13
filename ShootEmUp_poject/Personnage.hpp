@@ -20,10 +20,12 @@ class Personnage {
     int munitions;
     float tauxUtlime;
     float speed = 1.0f;
+    
 public:
     float x, y;
     vector<Munitions> mun;
     Font font;
+    int score;
     
     Personnage();
     Personnage(int vies, int munitions, float tauxUltime, float x, float y);

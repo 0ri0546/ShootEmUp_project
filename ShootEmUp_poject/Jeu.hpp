@@ -10,6 +10,7 @@
 #include <ctime>
 
 #include "Personnage.hpp"
+#include "EnnemiFaible.hpp"
 
 using namespace std;
 using namespace sf;
@@ -22,10 +23,11 @@ private:
     time_t start, end;
     Text textMunitions, textVie, textUlt, textWave, textLevel, textRecharge;
     Sprite persoSprite, persoSpriteAtt, viesSpriteFull, viesSprite0, viesSprite1, viesSprite2;
-    Texture persoTexture, persoTextureAtt, viesTextureFull, viesTexture0, viesTexture1, viesTexture2, bg1Texture, bg2Texture, bg3Texture;
+    Texture persoTexture, persoTextureAtt, viesTextureFull, viesTexture0, viesTexture1, viesTexture2, bg1Texture, bg2Texture, bg3Texture, hermesText;
     Mouse mouse;
     Personnage personnage;
     int enAttaque = 0;
+    int enAttaquePerso = 0;
 
 public:
     Jeu(const int score);
