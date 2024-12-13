@@ -14,6 +14,13 @@ Jeu::Jeu(int score) : score(score) {
     if (!bg1Texture.loadFromFile("bg1.png")) {}
     if (!bg2Texture.loadFromFile("bg2.png")) {}
     if (!bg3Texture.loadFromFile("bg3.png")) {}
+    if (!bg3Texture.loadFromFile("ult1.png")) {}
+    if (!bg3Texture.loadFromFile("bg3.png")) {}
+    if (!bg3Texture.loadFromFile("bg3.png")) {}
+    if (!bg3Texture.loadFromFile("bg3.png")) {}
+    if (!bg3Texture.loadFromFile("bg3.png")) {}
+    if (!bg3Texture.loadFromFile("bg3.png")) {}
+    if (!bg3Texture.loadFromFile("bg3.png")) {}
 }
 void Jeu::resize(Texture& texture, Sprite& sprite, float scaleX, float scaleY) {
     sprite.setTexture(texture);
@@ -61,8 +68,8 @@ void Jeu::boucleDeJeu() {
     bg2Sprite.setPosition(0, -HEIGHT);
 
     Sprite bg3Sprite(bg3Texture);
-    resize(bg3Texture, bg3Sprite, WIDTH, HEIGHT * 2);
-    bg3Sprite.setPosition(0, -HEIGHT);
+    resize(bg3Texture, bg3Sprite, WIDTH, HEIGHT * 3);
+    bg3Sprite.setPosition(0, -HEIGHT*2);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -157,7 +164,7 @@ void Jeu::boucleDeJeu() {
         moveBg(bg2Sprite, 0.0f, -0.5f);
         if (bg2Sprite.getPosition().y > 0) bg2Sprite.setPosition(Vector2f(0, -HEIGHT));
         moveBg(bg3Sprite, 0.0f, -2.0f);
-        if (bg3Sprite.getPosition().y > 0) bg3Sprite.setPosition(Vector2f(0, -HEIGHT));
+        if (bg3Sprite.getPosition().y > 0) bg3Sprite.setPosition(Vector2f(0, -HEIGHT*2));
         if (ultState == 2) { window.draw(ultArea); }
         window.display();
     }
