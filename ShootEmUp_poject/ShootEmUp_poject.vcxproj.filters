@@ -24,7 +24,7 @@
     <ClCompile Include="PowerUp.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="EnnemiFaible.cpp">
+    <ClCompile Include="Hermes.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="EnnemiMoyen.cpp">
@@ -50,7 +50,7 @@
     <ClInclude Include="PowerUp.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="EnnemiFaible.hpp">
+    <ClInclude Include="Hermes.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="EnnemiMoyen.hpp">

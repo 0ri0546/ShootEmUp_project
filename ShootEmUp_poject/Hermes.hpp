@@ -1,5 +1,5 @@
-#ifndef ENNEMIFAIBLE_HPP
-#define ENNEMIFAIBLE_HPP
+#ifndef HERMES_HPP
+#define HERMES_HPP
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <string>
@@ -36,6 +36,8 @@ public:
         speed = 5.f;
         
     };
+    void depEnnemisLeft(vector<Hermes>& ennemis, int niveau, int vague);
+    void depEnnemisRight(vector<Hermes>& ennemis, int niveau, int vague);
 };
 
 #endif

@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="EnnemiFaible.cpp" />
+    <ClCompile Include="Hermes.cpp" />
     <ClCompile Include="EnnemiFort.cpp" />
     <ClCompile Include="EnnemiMoyen.cpp" />
     <ClCompile Include="Jeu.cpp" />
@@ -151,7 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Datas.hpp" />
-    <ClInclude Include="EnnemiFaible.hpp" />
+    <ClInclude Include="Hermes.hpp" />
     <ClInclude Include="EnnemiFort.hpp" />
     <ClInclude Include="EnnemiMoyen.hpp" />
     <ClInclude Include="Jeu.hpp" />
