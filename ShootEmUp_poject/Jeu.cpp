@@ -190,7 +190,7 @@ void Jeu::boucleDeJeu() {
             window.draw(rectangleMunitionsOutLine);
             
             if (enAttaque > 0) { window.draw(persoSpriteAtt); enAttaque++; }
-            if (enAttaque >= 20) { enAttaque = 0;  window.draw(persoSprite); }
+            if (enAttaque >= 20) { enAttaque = 0;  window.draw(persoSprite); } // ------------------a changer pr powerup-----------------
 
             
             window.draw(textMunitions);
