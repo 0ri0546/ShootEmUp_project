@@ -91,7 +91,7 @@ void Jeu::boucleDeJeu() {
     hermes1.paterns(hermes, 10);
 
     while (window.isOpen()) {
-        
+        cout << enAttaqueMax;
         enAttaquePerso++;
         sf::Event event;
         if (ultime == 0) { if (!ultTexture.loadFromFile("ult9.png")) {} } // à revoir
@@ -266,8 +266,8 @@ void Jeu::boucleDeJeu() {
             window.draw(rectangleMunitionsOutLine);
             
             if (enAttaque > 0) { window.draw(persoSpriteAtt); enAttaque++; }
-            if (enAttaque >= 20) { enAttaque = 0;  window.draw(persoSprite); }
-
+            if (enAttaque >= enAttaqueMax) { enAttaque = 0;  window.draw(persoSprite); }
+            cout << enAttaqueMax << endl;
             
             window.draw(textMunitions);
             window.draw(textUlt);
@@ -339,7 +339,7 @@ void Jeu::boucleDeJeu() {
                 it->powerUp.move(0, 1.f);
 
                 if (it->powerUp.getGlobalBounds().intersects(persoSprite.getGlobalBounds())) {
-                    personnage.setMunitions(50);
+                    enAttaqueMax = 1;
                     it = power2.erase(it);
                     continue;
                 }
@@ -350,7 +350,7 @@ void Jeu::boucleDeJeu() {
                 it->powerUp.move(0, 1.f);
 
                 if (it->powerUp.getGlobalBounds().intersects(persoSprite.getGlobalBounds())) {
-                    personnage.setMunitions(50);
+                    enAttaqueMax = 1;
                     it = power3.erase(it);
                     continue;
                 }

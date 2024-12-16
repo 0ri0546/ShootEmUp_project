@@ -30,6 +30,7 @@ private:
     int enAttaque = 0;
     
     int ultime = 0;
+    int enAttaqueMax=20;
     bool firstDep = true;
     Color couleurAvecOpacite = Color(255, 255, 255, 220);
 public:
