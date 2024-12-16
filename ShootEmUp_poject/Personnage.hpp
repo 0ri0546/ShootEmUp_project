@@ -11,6 +11,7 @@
 
 #include "Datas.hpp"
 #include "Munitions.hpp"
+#include "Hermes.hpp"
 
 using namespace std;
 using namespace sf;
@@ -18,6 +19,7 @@ using namespace sf;
 class Personnage {
     int vies;
     int munitions;
+    
     float tauxUtlime;
     float speed = 1.0f;
     
@@ -30,7 +32,7 @@ public:
     Personnage();
     Personnage(int vies, int munitions, float tauxUltime, float x, float y);
     void deplacement(RectangleShape& rectangle, Event event, RenderWindow& window);
-    bool attaque(RectangleShape& rectangle, Event event, RenderWindow& window, int spriteAnimation);
+    bool attaque(RectangleShape& rectangle, Event event, RenderWindow& window, int spriteAnimation, vector<Hermes> hermes);
     void ult(RectangleShape& rectangle, Event event, RenderWindow& window);
     void setTexture(RectangleShape& rectangle, const Texture *texture);
     void setVies(int nouvelleVie);
@@ -43,6 +45,7 @@ public:
     void creerText(Text& text, const std::string& texte, int charSize, const sf::Color& color, float x, float y, Font& font);
     float getPositionX();
     float getPositionY();
+    int chargeurMax = 32;
 };
 
 #endif

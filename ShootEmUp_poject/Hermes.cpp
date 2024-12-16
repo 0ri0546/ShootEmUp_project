@@ -34,35 +34,20 @@ void Hermes::drop() {
     //un pourcentage de chance de drop un powerUp
 }
 
-void Hermes::depEnnemisLeft(vector<Hermes>& ennemis, int niveau, int vague) {
-    static std::vector<int> directions(ennemis.size(), 1);
-    static std::vector<int> verticalDirections(ennemis.size(), 1);
-    static std::vector<float> delays(ennemis.size(), 0);
+void Hermes::depEnnemisRight(vector<Hermes>& ennemis, int velocity) {
+    static vector<int> directions(ennemis.size(), 1);
+    static vector<int> verticalDirections(ennemis.size(), 1);
+    static vector<float> delays(ennemis.size(), 0);
     float delayBetweenEnemies = 0.3f;
-    float vitesse = 0.1f * ((vague * niveau) / 2);
+    float vitesse = 1.f * velocity;
+    srand(time(NULL));
+    const char arrayNum[2] = { 1, -1};
+
 
     for (size_t i = 0; i < ennemis.size(); ++i) {
         Hermes& ennemi = ennemis[i];
-        sf::Vector2f position = ennemi.hermes.getPosition();
-        if (delays[i] < i * delayBetweenEnemies) { delays[i] += vitesse; continue; }
-        ennemi.hermes.move(vitesse * directions[i], vitesse * verticalDirections[i]);
-        if (position.x + vitesse >= WIDTH - ennemi.hermes.getGlobalBounds().width) { directions[i] = -1; }
-        else if (position.x - vitesse <= 0) {  directions[i] = 1; }
-        if (position.y + vitesse >= HEIGHT / 2) { verticalDirections[i] = -1; }
-        else if (position.y <= 0) { verticalDirections[i] = 1; }
-    }
-}
+        Vector2f position = ennemi.hermes.getPosition();
 
-void Hermes::depEnnemisRight(vector<Hermes>& ennemis, int niveau, int vague) {
-    static std::vector<int> directions(ennemis.size(), 1);
-    static std::vector<int> verticalDirections(ennemis.size(), 1);
-    static std::vector<float> delays(ennemis.size(), 0);
-    float delayBetweenEnemies = 0.3f;
-    float vitesse = 0.1f * vague * 2;
-
-    for (size_t i = 0; i < ennemis.size(); ++i) {
-        Hermes& ennemi = ennemis[i];
-        sf::Vector2f position = ennemi.hermes.getPosition();
         if (delays[i] < i * delayBetweenEnemies) { delays[i] += vitesse; continue; }
         ennemi.hermes.move(vitesse * -directions[i], vitesse * verticalDirections[i]);
         if (position.x + vitesse >= WIDTH - ennemi.hermes.getGlobalBounds().width) { directions[i] = 1; }
@@ -71,5 +56,14 @@ void Hermes::depEnnemisRight(vector<Hermes>& ennemis, int niveau, int vague) {
         else if (position.y <= 0) { verticalDirections[i] = 1; }
     }
 }
+
+void Hermes::paterns(vector<Hermes>& hermes, int ennemis) {
+    srand((unsigned)time(0));
+    if (!hermesText.loadFromFile("Kratosidle.png")) {}
+    for (int i = 0; i < ennemis; ++i) {
+        hermes.push_back(Hermes(rand() % WIDTH, rand() % HEIGHT / 2, hermesText));
+    }
+}
+
 void Hermes::setVies(int nouvelleVies) { vies = nouvelleVies; }
 int Hermes::getVies() { return vies; }

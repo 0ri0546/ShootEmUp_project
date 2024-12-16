@@ -23,7 +23,7 @@ public:
     void drop();
     void setVies(int nouvelleVies);
     int getVies();
-
+    Texture hermesText;
     sf::Sprite hermes;
     float speed;
     int vie = 1;
@@ -36,8 +36,8 @@ public:
         speed = 5.f;
         
     };
-    void depEnnemisLeft(vector<Hermes>& ennemis, int niveau, int vague);
-    void depEnnemisRight(vector<Hermes>& ennemis, int niveau, int vague);
+    void paterns(vector<Hermes>& hermes, int ennemis);
+    void depEnnemisRight(vector<Hermes>& ennemis, int velocity);
 };
 
 #endif

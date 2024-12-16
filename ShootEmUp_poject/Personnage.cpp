@@ -12,7 +12,7 @@ Personnage::Personnage(int vies, int munitions, float tauxUltime, float x, float
 void Personnage::deplacement(RectangleShape& rectangle, Event event, RenderWindow& window) {
     static Vector2f targetPosition = rectangle.getPosition();
     static sf::Clock clock;
-    float velocity = 200.f;
+    float velocity = 400.f;
     const float stopThreshold = 5.f;
     const float maxX = WIDTH; 
     const float maxY = HEIGHT / 2.f;
@@ -40,7 +40,7 @@ void Personnage::deplacement(RectangleShape& rectangle, Event event, RenderWindo
     }
 }
 
-bool Personnage::attaque(RectangleShape& rectangle, Event event, RenderWindow& window, int spriteAnimation) {
+bool Personnage::attaque(RectangleShape& rectangle, Event event, RenderWindow& window, int spriteAnimation, vector<Hermes> hermes) {
     for (auto it = mun.begin(); it != mun.end(); ) {
         Texture test;
 
@@ -57,8 +57,12 @@ bool Personnage::attaque(RectangleShape& rectangle, Event event, RenderWindow& w
         it->mun.move(0.f, -10.f);
 
         if (it->mun.getPosition().y + test.getSize().y + 20 < 0) { it = mun.erase(it); }
+
+
         else { ++it; }
+        Vector2f pos = it->mun.getPosition();
     }
+
     /*for (auto& elem : mun) {
         cout << elem.getPosX() << endl;
     }*/

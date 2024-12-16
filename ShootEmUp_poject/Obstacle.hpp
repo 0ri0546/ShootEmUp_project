@@ -17,7 +17,7 @@ private:
     float x, y;
     int index;
 public:
-    Obstacle(float x, float y, int index);
+    Obstacle(float x, float y);
     void move(float speed);
     vector<Obstacle> obs;
 };
