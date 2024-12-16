@@ -19,6 +19,8 @@ Jeu::Jeu(int score) : score(score) {
     if (!exitTexture.loadFromFile("exitButton.png")) {}
     if (!editorTexture.loadFromFile("editorButton.png")) {}
     if (!powerUpTexture1.loadFromFile("powerUpTexture1.png")) {}
+    if (!powerUpTexture2.loadFromFile("powerUpTexture2.png")) {}
+    if (!powerUpTexture3.loadFromFile("powerUpTexture3.png")) {}
     
     
     if (!dgtultTexture.loadFromFile("dgtult.png")) {}
@@ -292,20 +294,20 @@ void Jeu::boucleDeJeu() {
 
 
                 if (it->vie == 0) {
-                    int randPowerUp = rand() % 5;
+                    int randPowerUp = rand() % 10;
                     ultime += 5.f;
-                    if (randPowerUp == 1) {
+                    if (randPowerUp == 2) {
 
                         power1.push_back(PowerUp(it->hermes.getPosition().x, it->hermes.getPosition().y, 1, powerUpTexture1));
                         
 
 
                     }
-                    if (randPowerUp == 3) {
-                        power2.push_back(PowerUp(it->hermes.getPosition().x, it->hermes.getPosition().y, 2, powerUpTexture1));
+                    if (randPowerUp == 4) {
+                        power2.push_back(PowerUp(it->hermes.getPosition().x, it->hermes.getPosition().y, 2, powerUpTexture2));
                     }
-                    if (randPowerUp == 5) {
-                        power3.push_back(PowerUp(it->hermes.getPosition().x, it->hermes.getPosition().y, 3, powerUpTexture1));
+                    if (randPowerUp == 6) {
+                        power3.push_back(PowerUp(it->hermes.getPosition().x, it->hermes.getPosition().y, 3, powerUpTexture3));
                     }
                     it = hermes.erase(it);
                     continue;
@@ -328,6 +330,28 @@ void Jeu::boucleDeJeu() {
                 if (it->powerUp.getGlobalBounds().intersects(persoSprite.getGlobalBounds())) {
                     personnage.setMunitions(50);
                     it = power1.erase(it);
+                    continue;
+                }
+                it++;
+            }
+            for (auto it = power2.begin(); it != power2.end();) {
+                window.draw(it->powerUp);
+                it->powerUp.move(0, 1.f);
+
+                if (it->powerUp.getGlobalBounds().intersects(persoSprite.getGlobalBounds())) {
+                    personnage.setMunitions(50);
+                    it = power2.erase(it);
+                    continue;
+                }
+                it++;
+            }
+            for (auto it = power3.begin(); it != power3.end();) {
+                window.draw(it->powerUp);
+                it->powerUp.move(0, 1.f);
+
+                if (it->powerUp.getGlobalBounds().intersects(persoSprite.getGlobalBounds())) {
+                    personnage.setMunitions(50);
+                    it = power3.erase(it);
                     continue;
                 }
                 it++;
