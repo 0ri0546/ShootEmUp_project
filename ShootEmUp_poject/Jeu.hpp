@@ -9,7 +9,7 @@
 #include <SFML/Audio.hpp>
 #include <ctime>
 
-#include "Personnage.hpp"
+#include "Obstacle.hpp"
 #include "Hermes.hpp"
 #include "PowerUp.hpp"
 using namespace std;

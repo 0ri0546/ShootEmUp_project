@@ -1,25 +1,17 @@
 #ifndef OBSTACLE_HPP
 #define OBSTACLE_HPP
-
-#include <SFML/Graphics.hpp>
-#include <iostream>
-#include <string>
-#include <vector>
-#include <windows.h>
-#include <SFML/Audio.hpp>
-#include <ctime>
+#include "Personnage.hpp"
 
 using namespace std;
 using namespace sf;
 
 class Obstacle {
-private:
-    float x, y;
-    int index;
 public:
-    Obstacle(float x, float y);
-    void move(float speed);
-    vector<Obstacle> obs;
+    RectangleShape shape;
+    float speed;
+    Obstacle(float x, float y, float width, float height, float speed, Color color);
+    void move();
+    bool isOutOfBounds(float windowHeight);
 };
 
 #endif
