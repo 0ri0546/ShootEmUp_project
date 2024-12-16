@@ -1,19 +1,10 @@
 #include "PowerUp.hpp"
+using namespace sf;
+using namespace std;
 
-void PowerUp::cadenceDeTir() {
-    //augmente les tirs par seconde
-}
-void PowerUp::upChargeur() {
-    //augmente la capacité du chargeur
-}
-void PowerUp::MultiShot() {
-    //tire en diagonale
-}
-void PowerUp::bouclier() {
-    //invincible pendant x secondes
-}
-void PowerUp::gel() {
-    //arret du mouvement des ennemis
+
+void PowerUp::deplacer() {
+
 }
 
-string PowerUp::getType() { return type; }
+
