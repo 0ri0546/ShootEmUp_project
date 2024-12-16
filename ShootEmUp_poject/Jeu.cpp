@@ -14,6 +14,13 @@ Jeu::Jeu(int score) : score(score) {
     if (!bg1Texture.loadFromFile("bg1.png")) {}
     if (!bg2Texture.loadFromFile("bg2.png")) {}
     if (!bg3Texture.loadFromFile("bg3.png")) {}
+    if (!startTexture.loadFromFile("startButton.png")) {}
+    if (!optionTexture.loadFromFile("optionsButton.png")) {}
+    if (!exitTexture.loadFromFile("exitButton.png")) {}
+    if (!editorTexture.loadFromFile("editorButton.png")) {}
+    if (!powerUpTexture1.loadFromFile("powerUpTexture1.png")) {}
+    if (!powerUpTexture2.loadFromFile("powerUpTexture2.png")) {}
+    if (!powerUpTexture3.loadFromFile("powerUpTexture3.png")) {}
     
     
     if (!dgtultTexture.loadFromFile("dgtult.png")) {}
@@ -42,8 +49,14 @@ void Jeu::boucleDeJeu() {
     fontMunition.loadFromFile("god.ttf");
     RenderWindow window(VideoMode(WIDTH, HEIGHT), "Mount Olympus");
     //Texture hermestext;
-    enum class GameState { MenuStart, Jeu, levelSelect, OptionMenu };
-    GameState gameState = GameState::Jeu;
+    vector<PowerUp> power1;
+    vector<PowerUp> power2;
+    vector<PowerUp> power3;
+    enum class GameState { MenuStart, Jeu, levelSelect, OptionMenu, levelEditor };
+    enum class LevelState { Level1, Level2, Level3, Level4, Final };
+    enum class VagueState { Vague1, Vague2, Vague3, Vague4, Vague5, Boss };
+    GameState gameState = GameState::MenuStart;
+    LevelState level = LevelState::Level1;
     
     resize(persoTexture, persoSprite, 60.0f, 70.0f);
     resize(persoTextureAtt, persoSpriteAtt, 60.0f, 70.0f);
@@ -51,6 +64,12 @@ void Jeu::boucleDeJeu() {
 
     persoSprite.setPosition(POSBASEX, POSBASEY);
     persoSpriteAtt.setPosition(POSBASEX, POSBASEY);
+
+    startButton.setPosition(0, 0);
+    startButton.setTexture(startTexture);
+    exitButton.setTexture(exitTexture);
+    optionButton.setTexture(optionTexture);
+    editorButton.setTexture(editorTexture);
 
     personnage.creerPieceRectangle(joueur, Color::White, TAILLEX, TAILLEY, POSBASEX, POSBASEY);
     personnage.creerPieceRectangle(zoneDepl, Color::Green, WIDTH, HEIGHT / 2, 0, HEIGHT / 2);
@@ -70,7 +89,9 @@ void Jeu::boucleDeJeu() {
     vector<Hermes> hermes;
     Hermes hermes1(100, 100, hermesText);
     hermes1.paterns(hermes, 10);
+
     while (window.isOpen()) {
+        
         enAttaquePerso++;
         sf::Event event;
         if (ultime == 0) { if (!ultTexture.loadFromFile("ult9.png")) {} } // à revoir
@@ -89,37 +110,92 @@ void Jeu::boucleDeJeu() {
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
-            if (event.key.code == Keyboard::Space && personnage.getMunitions() > 0 && dontMove == 0 && ultState == 0) {
-                enAttaque++;
-                if (premierTir) {
+            if (gameState == GameState::MenuStart) {
+                if (event.key.code == Mouse::Left && sf::Mouse::getPosition(window).x > startButton.getGlobalBounds().left &&
+                    sf::Mouse::getPosition(window).x < startButton.getGlobalBounds().left +
+                    startButton.getGlobalBounds().width && sf::Mouse::getPosition(window).y >
+                    startButton.getGlobalBounds().top && sf::Mouse::getPosition(window).y
+                    < (startButton.getGlobalBounds().top + startButton.getGlobalBounds().height)) {
+                    gameState = GameState::Jeu;
+                }
+                if (event.key.code == Mouse::Left && sf::Mouse::getPosition(window).x > exitButton.getGlobalBounds().left &&
+                    sf::Mouse::getPosition(window).x < exitButton.getGlobalBounds().left +
+                    exitButton.getGlobalBounds().width && sf::Mouse::getPosition(window).y >
+                    exitButton.getGlobalBounds().top && sf::Mouse::getPosition(window).y
+                    < (exitButton.getGlobalBounds().top + exitButton.getGlobalBounds().height)) {
+                    window.close();
+                }
+                if (event.key.code == Mouse::Left && sf::Mouse::getPosition(window).x > editorButton.getGlobalBounds().left &&
+                    sf::Mouse::getPosition(window).x < editorButton.getGlobalBounds().left +
+                    editorButton.getGlobalBounds().width && sf::Mouse::getPosition(window).y >
+                    editorButton.getGlobalBounds().top && sf::Mouse::getPosition(window).y
+                    < (editorButton.getGlobalBounds().top + editorButton.getGlobalBounds().height)) {
+                    gameState = GameState::levelEditor;
+                }
+                if (event.key.code == Mouse::Left && sf::Mouse::getPosition(window).x > optionButton.getGlobalBounds().left &&
+                    sf::Mouse::getPosition(window).x < optionButton.getGlobalBounds().left +
+                    optionButton.getGlobalBounds().width && sf::Mouse::getPosition(window).y >
+                    optionButton.getGlobalBounds().top && sf::Mouse::getPosition(window).y
+                    < (optionButton.getGlobalBounds().top + optionButton.getGlobalBounds().height)) {
+                    gameState = GameState::OptionMenu;
+                }
+            }
+            if (gameState == GameState::Jeu) {
+                if (event.key.code == Keyboard::Space && personnage.getMunitions() > 0 && dontMove == 0 && ultState == 0) {
+                    enAttaque++;
+                    if (premierTir) {
+                        start = time(nullptr);
+                        personnage.mun.push_back(Munitions(joueur.getPosition().x - TAILLEX / 2, joueur.getPosition().y));
+                        personnage.setMunitions(personnage.getMunitions() - 1);
+                    }
+                    end = time(nullptr);
+                    if (end - start > 0) {
+                        premierTir = false;
+                        personnage.mun.push_back(Munitions(joueur.getPosition().x - TAILLEX / 2, joueur.getPosition().y));
+                        personnage.setMunitions(personnage.getMunitions() - 1);
+                    }
+                    else { premierTir = false; }
                     start = time(nullptr);
-                    personnage.mun.push_back(Munitions(joueur.getPosition().x - TAILLEX / 2, joueur.getPosition().y));
-                    personnage.setMunitions(personnage.getMunitions() - 1);
                 }
-                end = time(nullptr);
-                if (end - start > 0) {
-                    premierTir = false;
-                    personnage.mun.push_back(Munitions(joueur.getPosition().x - TAILLEX / 2, joueur.getPosition().y));
-                    personnage.setMunitions(personnage.getMunitions() - 1);
+                if (event.key.code == Keyboard::R && ultState == 0) {
+                    personnage.setMunitions(32);
+                    dontMove++;
+                    cout << "recharge" << endl;
                 }
-                else { premierTir = false; }
-                start = time(nullptr);
-            }
-            if (event.key.code == Keyboard::R && ultState == 0) {
-                personnage.setMunitions(31);
-                dontMove++;
-                cout << "recharge" << endl;
-            }
-            if (event.key.code == Keyboard::U && ultState == 0 && ultime >= 100) {
-                Game = "ult";
-                ultState = 1;
-                ultTimer.restart();
-                initialPosition = persoSprite.getPosition();
-                
-            }
-        }
+                if (event.key.code == Keyboard::U && ultState == 0 && ultime >= 100) {
+                    Game = "ult";
+                    ultState = 1;
+                    ultTimer.restart();
+                    initialPosition = persoSprite.getPosition();
 
+                }
+            }
+            
+        }
+        //window.clear();
+        if (gameState == GameState::MenuStart) {
+            
+            personnage.creerText(gameName, "MOUNT OLYMPUS", 64, Color::White, WIDTH / 2, HEIGHT / 2, fontMunition);
+            gameName.setPosition(WIDTH / 2 - gameName.getGlobalBounds().width / 2, HEIGHT / 2 - gameName.getGlobalBounds().height / 2 - 300);
+            startButton.setPosition(WIDTH / 2 - startButton.getGlobalBounds().width / 2 - 200, HEIGHT / 2 - startButton.getGlobalBounds().height / 2 - 100);
+            optionButton.setPosition(WIDTH / 2 - startButton.getGlobalBounds().width / 2 + 200, HEIGHT / 2 - startButton.getGlobalBounds().height / 2 - 100);
+            exitButton.setPosition(WIDTH / 2 - startButton.getGlobalBounds().width / 2 + 200, HEIGHT / 2 - startButton.getGlobalBounds().height / 2 + 100);
+            editorButton.setPosition(WIDTH / 2 - startButton.getGlobalBounds().width / 2 - 200, HEIGHT / 2 - startButton.getGlobalBounds().height / 2 + 100);
+
+
+
+            window.draw(gameName);
+            window.draw(startButton);
+            window.draw(exitButton);
+            window.draw(optionButton);
+            window.draw(editorButton);
+
+
+        }
         if (gameState == GameState::Jeu) {
+            if (enAttaquePerso == 100) {
+                enAttaquePerso = 0;
+            }
             if (personnage.getVies() == 3) { resize(viesTextureFull, viesSprite, 100.0f, 70.0f); }
             if (personnage.getVies() == 2) { resize(viesTexture2, viesSprite, 100.0f, 70.0f); }
             if (personnage.getVies() == 1) { resize(viesTexture1, viesSprite, 100.0f, 70.0f); }
@@ -200,17 +276,39 @@ void Jeu::boucleDeJeu() {
             for (auto it = hermes.begin(); it != hermes.end();) {
                 if (enAttaquePerso == 1) {
                     it->attaque(joueur, window, spriteAnimation);
+
+                }
+                for (auto& munition : it->mun) {
+                    munition.mun.setTexture(munition.textureMun);
+                    window.draw(munition.mun);
+
+                    munition.mun.move(0.f, 5.f);
+
+                    if (munition.mun.getGlobalBounds().intersects(persoSprite.getGlobalBounds())) {
+                        personnage.vies -= 1;
+                    }
                 }
                 window.draw(it->hermes);
 
-                if (enAttaquePerso == 1) {
-                    it->attaque(joueur, window, spriteAnimation);
+                
 
-                }
-                if (enAttaquePerso == 100) {
-                    enAttaquePerso == 0;
-                }
+
                 if (it->vie == 0) {
+                    int randPowerUp = rand() % 10;
+                    ultime += 5.f;
+                    if (randPowerUp == 2) {
+
+                        power1.push_back(PowerUp(it->hermes.getPosition().x, it->hermes.getPosition().y, 1, powerUpTexture1));
+                        
+
+
+                    }
+                    if (randPowerUp == 4) {
+                        power2.push_back(PowerUp(it->hermes.getPosition().x, it->hermes.getPosition().y, 2, powerUpTexture2));
+                    }
+                    if (randPowerUp == 6) {
+                        power3.push_back(PowerUp(it->hermes.getPosition().x, it->hermes.getPosition().y, 3, powerUpTexture3));
+                    }
                     it = hermes.erase(it);
                     continue;
                 }
@@ -219,9 +317,42 @@ void Jeu::boucleDeJeu() {
                     if (it->hermes.getGlobalBounds().intersects(munition.mun.getGlobalBounds())) {
                         it->vie -= 1;
                         personnage.score += 1;
-                        ultime += 5.f;
-                        cout << ultime << endl;
                     }
+                }
+                it++;
+
+
+            }
+            for (auto it = power1.begin(); it != power1.end();) {
+                window.draw(it->powerUp);
+                it->powerUp.move(0, 1.f);
+
+                if (it->powerUp.getGlobalBounds().intersects(persoSprite.getGlobalBounds())) {
+                    personnage.setMunitions(50);
+                    it = power1.erase(it);
+                    continue;
+                }
+                it++;
+            }
+            for (auto it = power2.begin(); it != power2.end();) {
+                window.draw(it->powerUp);
+                it->powerUp.move(0, 1.f);
+
+                if (it->powerUp.getGlobalBounds().intersects(persoSprite.getGlobalBounds())) {
+                    personnage.setMunitions(50);
+                    it = power2.erase(it);
+                    continue;
+                }
+                it++;
+            }
+            for (auto it = power3.begin(); it != power3.end();) {
+                window.draw(it->powerUp);
+                it->powerUp.move(0, 1.f);
+
+                if (it->powerUp.getGlobalBounds().intersects(persoSprite.getGlobalBounds())) {
+                    personnage.setMunitions(50);
+                    it = power3.erase(it);
+                    continue;
                 }
                 it++;
             }
@@ -234,8 +365,10 @@ void Jeu::boucleDeJeu() {
             if (bg3Sprite.getPosition().y > 0) bg3Sprite.setPosition(Vector2f(0, -HEIGHT * 2));
             if (ultState == 2 ) { window.draw(dgtultSprite); }
             window.draw(persoSprite);
-            window.display();
+            
         }
+        window.display();
+
     }
 }
 

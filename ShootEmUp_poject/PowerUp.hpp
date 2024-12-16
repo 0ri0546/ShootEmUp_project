@@ -9,15 +9,24 @@
 
 using namespace std;
 
-class PowerUp {
-	string type;
-	void cadenceDeTir();  //augmente les tirs par seconde
-	void upChargeur(); //augmente la capacité du chargeur
-	void MultiShot(); //tire en diagonale
-	void bouclier(); //invincible pendant x secondes
-	void gel(); //arret du mouvement des ennemis
 
-	string getType();
+class PowerUp {
+public:
+	float x, y;
+	int type;
+	sf::Sprite powerUp;
+
+	PowerUp(float posX, float posY, int type, sf::Texture& texture) {
+		powerUp.setTexture(texture);
+		powerUp.setPosition(posX, posY);
+		powerUp.setScale(sf::Vector2f(0.2f, 0.2f));
+
+
+	}
+	void deplacer();  //augmente les tirs par seconde
+
+
+
 };
 
 #endif

@@ -40,6 +40,8 @@ void Hermes::depEnnemisRight(vector<Hermes>& ennemis, int velocity) {
     static vector<float> delays(ennemis.size(), 0);
     float delayBetweenEnemies = 0.3f;
     float vitesse = 1.f * velocity;
+    
+    
 
 
     for (size_t i = 0; i < ennemis.size(); ++i) {
