@@ -19,12 +19,12 @@ class Jeu {
 private:
     int score;
     int chargeurMax = 32;
-    RectangleShape joueur, zoneDepl, bg1, bg2, bg3, rectangleRecharge, rectangleMunitions, rectangleMunitionsOutLine;
+    RectangleShape joueur, zoneDepl, bg1, bg2, bg3, rectangleRecharge, rectangleMunitions, rectangleMunitionsOutLine, rectanglePause;
     CircleShape ultArea;
     time_t start, end;
     Text textMunitions, textVie, textUlt, textWave, textLevel, textRecharge, gameName;
-    Sprite persoSprite, persoSpriteAtt, viesSprite, ultSprite, dgtultSprite, startButton, optionButton, exitButton, editorButton;
-    Texture persoTexture, persoTextureAtt, viesTextureFull, viesTexture0, viesTexture1, viesTexture2, bg1Texture, bg2Texture, bg3Texture, hermesText, ultTexture, dgtultTexture, startTexture, optionTexture, exitTexture, editorTexture, powerUpTexture1, powerUpTexture2, powerUpTexture3;
+    Sprite persoSprite, persoSpriteAtt, viesSprite, ultSprite, dgtultSprite, startButton, optionButton, exitButton, editorButton, obstacleSprite;
+    Texture persoTexture, persoTextureAtt, viesTextureFull, viesTexture0, viesTexture1, viesTexture2, bg1Texture, bg2Texture, bg3Texture, hermesText, ultTexture, dgtultTexture, startTexture, optionTexture, exitTexture, editorTexture, powerUpTexture1, powerUpTexture2, powerUpTexture3, obstacleTexture;
     Mouse mouse;
     Personnage personnage;
     int enAttaque = 0;

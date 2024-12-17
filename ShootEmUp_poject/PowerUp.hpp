@@ -19,7 +19,7 @@ public:
 	PowerUp(float posX, float posY, int type, sf::Texture& texture) {
 		powerUp.setTexture(texture);
 		powerUp.setPosition(posX, posY);
-		powerUp.setScale(sf::Vector2f(0.2f, 0.2f));
+		powerUp.setScale(sf::Vector2f(1.5f, 1.5f));
 
 
 	}

@@ -17,7 +17,7 @@ void Personnage::deplacement(RectangleShape& rectangle, Event event, RenderWindo
     const float maxX = WIDTH; 
     const float maxY = HEIGHT / 2.f;
 
-    if (Mouse::isButtonPressed(Mouse::Left)) {
+    if (Mouse::isButtonPressed(Mouse::Left )) {
         Vector2i posMouse = Mouse::getPosition(window);
         if (posMouse.x > 0 && posMouse.x < WIDTH && posMouse.y > 0 && posMouse.y < HEIGHT) {
             targetPosition = Vector2f(posMouse) - Vector2f(TAILLEX / 2, TAILLEY / 2);

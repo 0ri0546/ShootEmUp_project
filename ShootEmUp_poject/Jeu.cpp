@@ -21,6 +21,8 @@ Jeu::Jeu(int score) : score(score) {
     if (!powerUpTexture1.loadFromFile("powerUpTexture1.png")) {}
     if (!powerUpTexture2.loadFromFile("powerUpTexture2.png")) {}
     if (!powerUpTexture3.loadFromFile("powerUpTexture3.png")) {}
+    if (!obstacleTexture.loadFromFile("obstacle.png")) {}
+    
     if (!dgtultTexture.loadFromFile("dgtult.png")) {}
 }
 void Jeu::resize(Texture& texture, Sprite& sprite, float scaleX, float scaleY) {
@@ -50,7 +52,7 @@ void Jeu::boucleDeJeu() {
     vector<PowerUp> power1;
     vector<PowerUp> power2;
     vector<PowerUp> power3;
-    enum class GameState { MenuStart, Jeu, levelSelect, OptionMenu, levelEditor };
+    enum class GameState { MenuStart, Jeu, levelSelect, OptionMenu, levelEditor, pause };
     enum class LevelState { Level1, Level2, Level3, Level4, Final };
     enum class VagueState { Vague1, Vague2, Vague3, Vague4, Vague5, Boss };
     GameState gameState = GameState::MenuStart;
@@ -93,6 +95,7 @@ void Jeu::boucleDeJeu() {
     Hermes hermes1(100, 100, hermesText);
     hermes1.paterns(hermes, 10);
 
+    bool pause = false;
     while (window.isOpen()) {
         cout << enAttaqueMax;
         enAttaquePerso++;
@@ -108,7 +111,6 @@ void Jeu::boucleDeJeu() {
         else if (ultime <= 100.0) { if (!ultTexture.loadFromFile("ult1.png")) {} }
         resize(ultTexture, ultSprite, 100.0f, 100.0f);
         ultSprite.setPosition(20, HEIGHT - 120);
-
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 window.close();
@@ -142,9 +144,10 @@ void Jeu::boucleDeJeu() {
                     < (optionButton.getGlobalBounds().top + optionButton.getGlobalBounds().height)) {
                     gameState = GameState::OptionMenu;
                 }
+                window.display();
             }
             if (gameState == GameState::Jeu) {
-                if (event.key.code == Keyboard::Space && personnage.getMunitions() > 0 && dontMove == 0 && ultState == 0) {
+                if (event.key.code == Keyboard::Space && personnage.getMunitions() > 0 && dontMove == 0 && ultState == 0 && gameState != GameState::pause) {
                     enAttaque++;
                     if (premierTir) {
                         start = time(nullptr);
@@ -172,11 +175,27 @@ void Jeu::boucleDeJeu() {
                     initialPosition = persoSprite.getPosition();
                 }
             }
+            float posX = personnage.getPositionX();
+            float posY = personnage.getPositionY();
+            if (event.type == Event::KeyPressed) {
+                if (event.key.code == Keyboard::P && Game != "ult") {
+                    pause = true;
+                    gameState = GameState::pause;
+                    personnage.creerPieceRectangle(rectanglePause, Color(255, 255, 255, 150), WIDTH, HEIGHT, 0, 0);
+                    window.draw(rectanglePause);
+                    window.display();
+                }
+                if (event.key.code == Keyboard::A) pause = false;
+                if (gameState == GameState::pause && !pause) { // ------------------------------------------------PAUSE-------------------------------------
+                    persoSprite.setPosition(posX, posY);
+                    gameState = GameState::Jeu;
+                }
+            }
         }
-        //------------------------------------------------------------------------------------------------Obstacles------------------
+        //------------------------------------------------------------Obstacles------------------------------------------------------
         if (obstacleClock.getElapsedTime().asSeconds() >= obstacleSpawnInterval) {
             float randomX = static_cast<float>(rand() % static_cast<int>(WIDTH - 50));
-            obstacles.emplace_back(randomX, 0, 50, 50, 2.0f, Color::Red);
+            obstacles.emplace_back(randomX, 0, 50, 100, 5.0f, &obstacleTexture);
             obstacleClock.restart();
         }
 
@@ -189,7 +208,7 @@ void Jeu::boucleDeJeu() {
                 continue;
             }
 
-            if (it->isOutOfBounds(HEIGHT)) {
+            if (it->estDansLesLimites(HEIGHT)) {
                 it = obstacles.erase(it);
                 continue;
             }
@@ -213,7 +232,7 @@ void Jeu::boucleDeJeu() {
             window.draw(optionButton);
             window.draw(editorButton);
         }
-        if (gameState == GameState::Jeu) {
+        if (gameState == GameState::Jeu && gameState != GameState::pause) {
             if (enAttaquePerso == 100) {
                 enAttaquePerso = 0;
             }
@@ -261,7 +280,7 @@ void Jeu::boucleDeJeu() {
             window.draw(bg2Sprite);
             window.draw(bg3Sprite);
 
-            for (const auto& obstacle : obstacles) {
+            for (const auto& obstacle : obstacles) { //---afficher les obstacles------------------------
                 window.draw(obstacle.shape);
             }
 
@@ -283,7 +302,7 @@ void Jeu::boucleDeJeu() {
             rectangleMunitionsOutLine.setOutlineColor(Color::Black);
             rectangleMunitionsOutLine.setPosition(Vector2f(WIDTH - WIDTH / 3 + 20, HEIGHT - 70));
             rectangleMunitionsOutLine.setSize(Vector2f(32 * 7 + 50, 30));
-            personnage.creerText(textMunitions, to_string(personnage.getMunitions()), 30, Color::Black, WIDTH - WIDTH / 3 + 32 * 7 + 30, HEIGHT - 73, fontMunition); // _________________________________________________________
+            personnage.creerText(textMunitions, to_string(personnage.getMunitions()), 30, Color::Black, WIDTH - WIDTH / 3 + 32 * 7 + 30, HEIGHT - 73, fontMunition); 
 
             window.draw(textMunitions);
             window.draw(rectangleMunitions);
@@ -331,26 +350,26 @@ void Jeu::boucleDeJeu() {
             }
             for (auto it = power1.begin(); it != power1.end();) {
                 window.draw(it->powerUp);
-                it->powerUp.move(0, 1.f);
+                it->powerUp.move(0, 2.5f);
 
                 if (it->powerUp.getGlobalBounds().intersects(persoSprite.getGlobalBounds())) { personnage.setMunitions(50); it = power1.erase(it); continue; }
                 it++;
             }
             for (auto it = power2.begin(); it != power2.end();) {
                 window.draw(it->powerUp);
-                it->powerUp.move(0, 1.f);
+                it->powerUp.move(0, 2.5f);
 
                 if (it->powerUp.getGlobalBounds().intersects(persoSprite.getGlobalBounds())) { enAttaqueMax = 1; it = power2.erase(it); continue; }
                 it++;
             }
             for (auto it = power3.begin(); it != power3.end();) {
                 window.draw(it->powerUp);
-                it->powerUp.move(0, 1.f);
+                it->powerUp.move(0, 2.5f);
 
                 if (it->powerUp.getGlobalBounds().intersects(persoSprite.getGlobalBounds())) { enAttaqueMax = 1; it = power3.erase(it); continue; }
                 it++;
             }
-            hermes1.depEnnemisRight(hermes, 2);//------------------------------------------------------------------------------------------------
+            hermes1.depEnnemisRight(hermes, 2);//--------------------------Deplacemment des ennemis----------------------------------------------------------------------
             window.draw(viesSprite);
 
             moveBg(bg2Sprite, 0.0f, -0.5f);
@@ -358,9 +377,9 @@ void Jeu::boucleDeJeu() {
             moveBg(bg3Sprite, 0.0f, -2.0f);
             if (bg3Sprite.getPosition().y > 0) bg3Sprite.setPosition(Vector2f(0, -HEIGHT * 2));
             if (ultState == 2 ) { window.draw(dgtultSprite); }
-            window.draw(persoSprite);        }
-        window.display();
-
+            window.draw(persoSprite);        
+            window.display();
+        }
     }
 }
 

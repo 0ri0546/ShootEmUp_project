@@ -8,10 +8,11 @@ using namespace sf;
 class Obstacle {
 public:
     RectangleShape shape;
+    Texture obstacleTexture;
     float speed;
-    Obstacle(float x, float y, float width, float height, float speed, Color color);
+    Obstacle(float x, float y, float width, float height, float speed, const Texture *texture);
     void move();
-    bool isOutOfBounds(float windowHeight);
+    bool estDansLesLimites(float windowHeight);
 };
 
 #endif
