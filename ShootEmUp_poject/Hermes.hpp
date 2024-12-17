@@ -36,7 +36,8 @@ public:
         speed = 5.f;
         
     };
-    void paterns(vector<Hermes>& hermes, int ennemis);
+    void creerEnnemis(vector<Hermes>& hermes, int ennemis, float x, float y);
+    void patern( vector<Hermes>& hermes, float x, float y, float moveToX, float moveToY, float velocity);
     void depEnnemisRight(vector<Hermes>& ennemis, int velocity);
 };
 

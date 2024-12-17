@@ -34,16 +34,12 @@ void Hermes::drop() {
     //un pourcentage de chance de drop un powerUp
 }
 
-void Hermes::depEnnemisRight(vector<Hermes>& ennemis, int velocity) {
+void Hermes::depEnnemisRight(vector<Hermes>& ennemis, int velocity) { //deplace les ennemis dans le vecteur hermes en diagonale, et rebondi sur tous les wall
     static vector<int> directions(ennemis.size(), 1);
     static vector<int> verticalDirections(ennemis.size(), 1);
     static vector<float> delays(ennemis.size(), 0);
     float delayBetweenEnemies = 0.3f;
     float vitesse = 1.f * velocity;
-    
-    
-
-
     for (size_t i = 0; i < ennemis.size(); ++i) {
         Hermes& ennemi = ennemis[i];
         Vector2f position = ennemi.hermes.getPosition();
@@ -57,11 +53,22 @@ void Hermes::depEnnemisRight(vector<Hermes>& ennemis, int velocity) {
     }
 }
 
-void Hermes::paterns(vector<Hermes>& hermes, int ennemis) {
-    srand((unsigned)time(0));
+void Hermes::creerEnnemis(vector<Hermes>& hermes, int ennemis, float x, float y) { // creer N ennemis
     if (!hermesText.loadFromFile("Kratosidle.png")) {}
     for (int i = 0; i < ennemis; ++i) {
-        hermes.push_back(Hermes(rand() % WIDTH, rand() % HEIGHT / 2, hermesText));
+        hermes.push_back(Hermes(x * i, y, hermesText));
+    }
+}
+
+void Hermes::patern( vector<Hermes>& hermes, float x, float y, float moveToX, float moveToY, float velocity) { // deplace tous les ennemis du vector hermes vers un point ddonné
+    for (size_t i = 0; i < hermes.size(); ++i) {
+        Hermes& ennemi = hermes[i];
+        Vector2f position = ennemi.hermes.getPosition();
+        Vector2f direction(moveToX - position.x, moveToY - position.y);
+        float length = sqrt(direction.x * direction.x + direction.y * direction.y);
+        if (length != 0) { direction.x /= length; direction.y /= length; }
+        ennemi.hermes.move(direction.x * velocity, direction.y * velocity);
+        if (abs(moveToX - position.x) < velocity && abs(moveToY - position.y) < velocity) { ennemi.hermes.setPosition(moveToX, moveToY); }
     }
 }
 

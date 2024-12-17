@@ -93,7 +93,7 @@ void Jeu::boucleDeJeu() {
     vector<Munitions>mun;
     vector<Hermes> hermes;
     Hermes hermes1(100, 100, hermesText);
-    hermes1.paterns(hermes, 10);
+    hermes1.creerEnnemis(hermes, 2, WIDTH / 2, HEIGHT * 1/4); //---------------------------------
 
     bool pause = false;
     while (window.isOpen()) {
@@ -369,7 +369,8 @@ void Jeu::boucleDeJeu() {
                 if (it->powerUp.getGlobalBounds().intersects(persoSprite.getGlobalBounds())) { enAttaqueMax = 1; it = power3.erase(it); continue; }
                 it++;
             }
-            hermes1.depEnnemisRight(hermes, 2);//--------------------------Deplacemment des ennemis----------------------------------------------------------------------
+
+            hermes1.patern(hermes, 50, 50, 100, 100, 2.f);//--------------------------Deplacemment des ennemis----------------------------------------------------------------------
             window.draw(viesSprite);
 
             moveBg(bg2Sprite, 0.0f, -0.5f);
