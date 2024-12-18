@@ -9,6 +9,8 @@
 #include <SFML/Audio.hpp>
 #include <ctime>
 
+#include "Personnage.hpp"
+#include "Poseidon.hpp"
 #include "Obstacle.hpp"
 #include "Hermes.hpp"
 #include "PowerUp.hpp"
@@ -23,8 +25,8 @@ private:
     CircleShape ultArea;
     time_t start, end;
     Text textMunitions, textVie, textUlt, textWave, textLevel, textRecharge, gameName;
-    Sprite persoSprite, persoSpriteAtt, viesSprite, ultSprite, dgtultSprite, startButton, optionButton, exitButton, editorButton, obstacleSprite;
-    Texture persoTexture, persoTextureAtt, viesTextureFull, viesTexture0, viesTexture1, viesTexture2, bg1Texture, bg2Texture, bg3Texture, hermesText, ultTexture, dgtultTexture, startTexture, optionTexture, exitTexture, editorTexture, powerUpTexture1, powerUpTexture2, powerUpTexture3, obstacleTexture;
+    Sprite persoSprite, persoSpriteAtt, viesSprite, ultSprite, dgtultSprite, startButton, optionButton, exitButton, editorButton, obstacleSprite, backButton, level1Button, level2Button, level3Button, level4Button, level5Button;
+    Texture persoTexture, persoTextureAtt, viesTextureFull, viesTexture0, viesTexture1, viesTexture2, bg1Texture, bg2Texture, bg3Texture, hermesText, ultTexture, dgtultTexture, startTexture, optionTexture, exitTexture, editorTexture, powerUpTexture1, powerUpTexture2, powerUpTexture3, obstacleTexture, backTexture, level1ButtonTexture, level2ButtonTexture, level3ButtonTexture, level4ButtonTexture, level5ButtonTexture, poseidonTexture;;
     Mouse mouse;
     Personnage personnage;
     int enAttaque = 0;
@@ -32,6 +34,11 @@ private:
     int ultime = 0;
     int enAttaqueMax=20;
     bool firstDep = true;
+    bool level1ok = true;
+    bool level2ok = false;
+    bool level3ok = false;
+    bool level4ok = false;
+    bool level5ok = false;
     Color couleurAvecOpacite = Color(255, 255, 255, 220);
 public:
     int enAttaquePerso = 0;

@@ -1,5 +1,6 @@
-#ifndef PERSONNAGE_HPP
-#define PERSONNAGE_HPP
+#ifndef POSEIDON_HPP
+#define POSEIDON_HPP
+
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
@@ -7,7 +8,6 @@
 #include <vector>
 #include <windows.h>
 #include <SFML/Audio.hpp>
-#include <SFML/Window/Mouse.hpp>
 
 #include "Datas.hpp"
 #include "Munitions.hpp"
@@ -22,15 +22,23 @@ class Poseidon {
     float speed = 1.0f;
 
 public:
-    int vies;
+    Sprite poseidon;
+    int vies = 100;
     float x, y;
     vector<Munitions> mun;
     Font font;
     int score;
+    bool alive;
+    Poseidon(float posX, float posY, sf::Texture& texture) {
+        poseidon.setTexture(texture);
+        poseidon.setPosition(posX, posY);
+        poseidon.setScale(sf::Vector2f(0.2f, 0.2f));
 
-    Poseidon();
-    Poseidon(int vies, int munitions, float tauxUltime, float x, float y);
-    void deplacement(RectangleShape& rectangle, Event event, RenderWindow& window);
+        speed = 5.f;
+
+    };
+
+    void deplacement(int velocity);
     bool attaque(RectangleShape& rectangle, Event event, RenderWindow& window, int spriteAnimation);
     void ult(RectangleShape& rectangle, Event event, RenderWindow& window);
     void setTexture(RectangleShape& rectangle, const Texture* texture);
@@ -39,10 +47,10 @@ public:
     void setTauxUtlime(float NouveauTauxUlt);
     int getVies();
     int getMunitions();
-    
-    
-    
-    
+
+
+
+
     float getPositionX();
     float getPositionY();
 };

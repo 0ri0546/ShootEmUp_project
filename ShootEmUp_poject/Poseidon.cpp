@@ -3,13 +3,9 @@
 using namespace sf;
 
 
-Poseidon::Poseidon() {
-};
-Poseidon::Poseidon(int vies, int munitions, float tauxUltime, float x, float y) : vies(vies), munitions(munitions), tauxUtlime(tauxUltime), x(x), y(y) {
 
-};
 
-void Poseidon::deplacement(RectangleShape& rectangle, Event event, RenderWindow& window) {
+void Poseidon::deplacement(int velocity) {
     static Vector2f targetPosition = rectangle.getPosition();
     static sf::Clock clock;
     float velocity = 200.f;
@@ -59,10 +55,10 @@ bool Poseidon::attaque(RectangleShape& rectangle, Event event, RenderWindow& win
         if (it->mun.getPosition().y + test.getSize().y + 20 < 0) { it = mun.erase(it); }
         else { ++it; }
     }
-    /*for (auto& elem : mun) {
+    / for (auto& elem : mun) {
         cout << elem.getPosX() << endl;
-    }*/
-    return true;
+    } /
+        return true;
 }
 
 void Poseidon::ult(RectangleShape& rectangle, Event event, RenderWindow& window) {
