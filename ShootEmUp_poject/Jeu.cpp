@@ -61,6 +61,7 @@ void Jeu::boucleDeJeu() {
     enum class VagueState { Vague1, Vague2, Vague3, Vague4, Vague5, Boss };
     GameState gameState = GameState::MenuStart;
     LevelState level = LevelState::Level1;
+    VagueState vague = VagueState::Vague1;
 
     srand(static_cast<unsigned>(time(nullptr))); // pour les obstacles
     vector<Obstacle> obstacles;
@@ -99,7 +100,7 @@ void Jeu::boucleDeJeu() {
     vector<Munitions>mun;
     vector<Hermes> hermes;
     Hermes hermes1(100, 100, hermesText);
-    hermes1.creerEnnemis(hermes, 2, WIDTH / 2, HEIGHT * 1/4); //---------------------------------
+    hermes1.creerEnnemis(hermes, 2, WIDTH / 2, HEIGHT * 1/4); 
 
     bool pause = false;
     while (window.isOpen()) {
@@ -201,7 +202,7 @@ void Jeu::boucleDeJeu() {
                     < (optionButton.getGlobalBounds().top + optionButton.getGlobalBounds().height)) {
                     gameState = GameState::OptionMenu;
                 }
-                window.display();
+                
             }
             if (gameState == GameState::Jeu) {
                 if (event.key.code == Keyboard::Space && personnage.getMunitions() > 0 && dontMove == 0 && ultState == 0 && gameState != GameState::Pause) {
@@ -296,7 +297,7 @@ void Jeu::boucleDeJeu() {
             window.draw(backButton);
         }
         if (gameState == GameState::levelEditor) {
-            cout << "ok";
+            
             backButton.setPosition(WIDTH / 2 - backButton.getGlobalBounds().width / 2 - 400, HEIGHT / 2 - backButton.getGlobalBounds().height / 2 + 350);
 
             backButton.setScale(.4f, .4f);
@@ -304,7 +305,7 @@ void Jeu::boucleDeJeu() {
 
         }
         if (gameState == GameState::LevelSelect) {
-            cout << "ok";
+            
             backButton.setPosition(WIDTH / 2 - backButton.getGlobalBounds().width / 2 - 400, HEIGHT / 2 - backButton.getGlobalBounds().height / 2 + 350);
             level1Button.setPosition(WIDTH / 2 - backButton.getGlobalBounds().width / 2 - 400, HEIGHT / 2 - backButton.getGlobalBounds().height / 2);
             backButton.setScale(.4f, .4f);
@@ -313,7 +314,7 @@ void Jeu::boucleDeJeu() {
             window.draw(level1Button);
         }
         if (gameState == GameState::OptionMenu) {
-            cout << "ok";
+            
             backButton.setPosition(WIDTH / 2 - backButton.getGlobalBounds().width / 2 - 400, HEIGHT / 2 - backButton.getGlobalBounds().height / 2 + 350);
             backButton.setScale(.4f, .4f);
             window.draw(backButton);
@@ -364,7 +365,7 @@ void Jeu::boucleDeJeu() {
                     }
                     personnage.setVies(vies);
                 }
-
+                
                 if (Game == "jeu") { persoSprite.setPosition(joueur.getPosition()); persoSpriteAtt.setPosition(joueur.getPosition()); }
 
                 window.clear();
@@ -410,27 +411,45 @@ void Jeu::boucleDeJeu() {
                 window.draw(textUlt);
                 ultSprite.setTexture(ultTexture);
                 window.draw(ultSprite);
-                if (pose.size() > 0) {
-                    for (auto it = pose.begin(); it != pose.end();) {
-                        window.draw(it->poseidon);
-                        if (it->vies == 0) {
-                            it = pose.erase(it);
-                            gameState = GameState::MenuStart;
-                            continue;
-                        }
-                        for (auto& munition : personnage.mun) {
-                            if (it->poseidon.getGlobalBounds().intersects(munition.mun.getGlobalBounds())) {
-                                cout << it->vies;
+                if (vague == VagueState::Vague1) {
 
-                                it->vies--;
-                                personnage.score += 1;
+                   
+
+                }
+                if (vague == VagueState::Vague2) {
+
+                }
+                if (vague == VagueState::Vague3) {
+
+                }
+                if (vague == VagueState::Vague4) {
+
+                }
+                if (vague == VagueState::Boss) {
+                    if (pose.size() > 0) {
+                        for (auto it = pose.begin(); it != pose.end();) {
+                            window.draw(it->poseidon);
+                            if (it->vies == 0) {
+                                it = pose.erase(it);
+                                gameState = GameState::MenuStart;
+                                continue;
                             }
-                            if (it->poseidon.getGlobalBounds().intersects(munition.mun.getGlobalBounds())) { cout << it->vies, it->vies--; personnage.score += 1; }
-                        }
 
-                        it++;
+                            for (auto& munition : personnage.mun) {
+                                if (it->poseidon.getGlobalBounds().intersects(munition.mun.getGlobalBounds())) {
+                                    cout << it->vies;
+
+                                    it->vies--;
+                                    personnage.score += 1;
+                                }
+                                if (it->poseidon.getGlobalBounds().intersects(munition.mun.getGlobalBounds())) { cout << it->vies, it->vies--; personnage.score += 1; }
+                            }
+
+                            it++;
+                        }
                     }
                 }
+                
                 for (auto it = hermes.begin(); it != hermes.end();) {
                     if (enAttaquePerso == 1) {
                         it->attaque(joueur, window, spriteAnimation);

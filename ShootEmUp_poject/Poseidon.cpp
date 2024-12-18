@@ -36,7 +36,10 @@ void Poseidon::deplacement(int velocity) {
     }
 }
 
-bool Poseidon::attaque(RectangleShape& rectangle, Event event, RenderWindow& window, int spriteAnimation) {
+void Poseidon::attaque(RectangleShape& rectangle, RenderWindow& window, int spriteAnimation) {
+
+    mun.push_back(Munitions(poseidon.getPosition().x, poseidon.getPosition().y));
+
     for (auto it = mun.begin(); it != mun.end(); ) {
         Texture test;
 
@@ -50,15 +53,11 @@ bool Poseidon::attaque(RectangleShape& rectangle, Event event, RenderWindow& win
         it->mun.setTexture(test);
 
         window.draw(it->mun);
-        it->mun.move(0.f, -10.f);
+        it->mun.move(0.f, 10.f);
 
         if (it->mun.getPosition().y + test.getSize().y + 20 < 0) { it = mun.erase(it); }
         else { ++it; }
     }
-    / for (auto& elem : mun) {
-        cout << elem.getPosX() << endl;
-    } /
-        return true;
 }
 
 void Poseidon::ult(RectangleShape& rectangle, Event event, RenderWindow& window) {
