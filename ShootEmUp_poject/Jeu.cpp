@@ -1,4 +1,5 @@
 #include "Jeu.hpp"
+#include <thread>
 
 using namespace sf;
 using namespace std;
@@ -23,9 +24,13 @@ Jeu::Jeu(int score) : score(score) {
     if (!powerUpTexture3.loadFromFile("powerUpTexture3.png")) {}
     if (!obstacleTexture.loadFromFile("obstacle.png")) {}
     if (!backTexture.loadFromFile("backButton.png")) {}
+    if (!plusTexture.loadFromFile("plusSound.png")) {}
+    if (!moinsTexture.loadFromFile("moinsSound.png")) {}
     if (!level1ButtonTexture.loadFromFile("level1Button1.png")) {}
     if (!poseidonTexture.loadFromFile("poseidon.png")) {}
     if (!dgtultTexture.loadFromFile("dgtult.png")) {}
+    if (!bgOption.loadFromFile("bgOption.png")) {}
+    if (!bgGameOverTexture.loadFromFile("bgGameOver.png")) {}
 }
 void Jeu::resize(Texture& texture, Sprite& sprite, float scaleX, float scaleY) {
     sprite.setTexture(texture);
@@ -39,6 +44,23 @@ void Jeu::moveBg(Sprite& sprite, float speedX, float speedY) {
 }
 
 void Jeu::boucleDeJeu() {
+    
+    sf::SoundBuffer buffer;
+    if (!buffer.loadFromFile("soundFond.mp3"));
+    sf::Sound sound;
+    sound.setBuffer(buffer);
+    sound.setLoop(true);
+    sound.setVolume(50);
+    sound.play();
+
+    sf::SoundBuffer death;
+    if (!death.loadFromFile("death.mp3"));
+    sf::Sound soundDeath;
+
+    soundDeath.setBuffer(death);
+    soundDeath.setVolume(50);
+    
+
     int spriteAnimation = 0;
     string Game = "jeu";
     bool premierTir = true;
@@ -80,6 +102,8 @@ void Jeu::boucleDeJeu() {
     optionButton.setTexture(optionTexture);
     editorButton.setTexture(editorTexture);
     backButton.setTexture(backTexture);
+    plusSprite.setTexture(plusTexture);
+    moinsSprite.setTexture(moinsTexture);
     level1Button.setTexture(level1ButtonTexture);
 
     personnage.creerPieceRectangle(joueur, Color::White, TAILLEX, TAILLEY, POSBASEX, POSBASEY);
@@ -92,6 +116,14 @@ void Jeu::boucleDeJeu() {
     Sprite bg2Sprite(bg2Texture);
     resize(bg2Texture, bg2Sprite, WIDTH, HEIGHT * 2);
     bg2Sprite.setPosition(0, -HEIGHT);
+
+    Sprite bgOptionSprite(bgOption);
+    resize(bgOption, bgOptionSprite, WIDTH, HEIGHT);
+    bgOptionSprite.setPosition(0, 0);
+
+    Sprite bgGameOverSprite(bgGameOverTexture);
+    resize(bgGameOverTexture, bgGameOverSprite, WIDTH, HEIGHT);
+    bgGameOverSprite.setPosition(0, 0);
 
     Sprite bg3Sprite(bg3Texture);
     resize(bg3Texture, bg3Sprite, WIDTH, HEIGHT * 3);
@@ -132,6 +164,7 @@ void Jeu::boucleDeJeu() {
                     backButton.getGlobalBounds().width && sf::Mouse::getPosition(window).y >
                     backButton.getGlobalBounds().top && sf::Mouse::getPosition(window).y
                     < (backButton.getGlobalBounds().top + backButton.getGlobalBounds().height)) {
+                    soundDeath.pause();
                     gameState = GameState::MenuStart;
                 }
             }
@@ -169,6 +202,27 @@ void Jeu::boucleDeJeu() {
                     < (backButton.getGlobalBounds().top + backButton.getGlobalBounds().height)) {
                     gameState = GameState::MenuStart;
                 }
+                if (event.key.code == Mouse::Left && sf::Mouse::getPosition(window).x > plusSprite.getGlobalBounds().left &&
+                    sf::Mouse::getPosition(window).x < plusSprite.getGlobalBounds().left +
+                    plusSprite.getGlobalBounds().width && sf::Mouse::getPosition(window).y >
+                    plusSprite.getGlobalBounds().top && sf::Mouse::getPosition(window).y
+                    < (plusSprite.getGlobalBounds().top + plusSprite.getGlobalBounds().height)) {
+                    sound.setVolume(sound.getVolume() + 1.f);
+                    if (sound.getVolume() >= 75)
+                    {
+                        sound.setVolume(75);
+                    }
+                    cout << "ok";
+                }
+                if (event.key.code == Mouse::Left && sf::Mouse::getPosition(window).x > moinsSprite.getGlobalBounds().left &&
+                    sf::Mouse::getPosition(window).x < moinsSprite.getGlobalBounds().left +
+                    moinsSprite.getGlobalBounds().width && sf::Mouse::getPosition(window).y >
+                    moinsSprite.getGlobalBounds().top && sf::Mouse::getPosition(window).y
+                    < (moinsSprite.getGlobalBounds().top + moinsSprite.getGlobalBounds().height)) {
+                    sound.setVolume(sound.getVolume() - 1.f);
+                    cout << "ok";
+                }
+
             }
             if (gameState == GameState::Pause) {}
 
@@ -291,6 +345,19 @@ void Jeu::boucleDeJeu() {
         }
 
         if (gameState == GameState::GameOver) {
+            soundDeath.setVolume(sound.getVolume());
+            sound.pause();
+            if (itSound != 0 && itSound < 5)
+            {
+                soundDeath.play();
+            }
+            itSound++;
+
+            window.draw(bgGameOverSprite);
+            string text = "Game Over";
+            personnage.creerText(textGameOver, text, 150, Color::White, WIDTH / 2 - plusSprite.getGlobalBounds().width / 2 - text.size() * 50 / 2, 50, fontMunition);
+            textGameOver.setPosition(WIDTH / 2 - textGameOver.getGlobalBounds().width / 2, HEIGHT / 2 - textGameOver.getGlobalBounds().height / 2 - 300);
+            window.draw(textGameOver);
             backButton.setPosition(WIDTH / 2 - backButton.getGlobalBounds().width / 2 - 400, HEIGHT / 2 - backButton.getGlobalBounds().height / 2 + 350);
             backButton.setScale(.4f, .4f);
             window.draw(backButton);
@@ -313,10 +380,26 @@ void Jeu::boucleDeJeu() {
             window.draw(level1Button);
         }
         if (gameState == GameState::OptionMenu) {
-            cout << "ok";
+            window.draw(bgOptionSprite);
+            string text = "Parametres audio";
+            int th = roundl(sound.getVolume());
+            string vol = "" + to_string(th);
+            personnage.creerText(textOption, text, 100, Color::White, WIDTH / 2 - plusSprite.getGlobalBounds().width / 2 - text.size()*50 / 2, 50, fontMunition);
+            textOption.setPosition(WIDTH / 2 - textOption.getGlobalBounds().width / 2, HEIGHT / 2 - textOption.getGlobalBounds().height / 2 - 300);
+            personnage.creerText(volume, vol, 50, Color::White, WIDTH / 2 - 50 / 2, HEIGHT / 2 - plusSprite.getGlobalBounds().height / 2, fontMunition);
+            window.draw(textOption);
+            window.draw(volume);
             backButton.setPosition(WIDTH / 2 - backButton.getGlobalBounds().width / 2 - 400, HEIGHT / 2 - backButton.getGlobalBounds().height / 2 + 350);
             backButton.setScale(.4f, .4f);
             window.draw(backButton);
+
+            plusSprite.setPosition(WIDTH / 2 - plusSprite.getGlobalBounds().width / 2 - 200, HEIGHT / 2 - plusSprite.getGlobalBounds().height / 2);
+            plusSprite.setScale(3.4f, 3.4f);
+            window.draw(plusSprite);
+
+            moinsSprite.setPosition(WIDTH / 2 - plusSprite.getGlobalBounds().width / 2 + 200, HEIGHT / 2 - plusSprite.getGlobalBounds().height / 2);
+            moinsSprite.setScale(3.4f, 3.4f);
+            window.draw(moinsSprite);
 
 
         }
@@ -325,6 +408,7 @@ void Jeu::boucleDeJeu() {
                 if (personnage.vies == 0) {
                     window.clear();
                     gameState = GameState::GameOver;
+                    itSound++;
                 }
                 if (enAttaquePerso == 100) {
                     enAttaquePerso = 0;

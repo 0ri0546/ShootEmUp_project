@@ -17,7 +17,7 @@ int main() {
     const int HEIGHT = 1080;
     using namespace std;
     using namespace sf;
-
+    
     Jeu jeu(0);
     jeu.boucleDeJeu();
     

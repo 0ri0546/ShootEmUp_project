@@ -21,12 +21,22 @@ class Jeu {
 private:
     int score;
     int chargeurMax = 32;
-    RectangleShape joueur, zoneDepl, bg1, bg2, bg3, rectangleRecharge, rectangleMunitions, rectangleMunitionsOutLine, rectanglePause;
+    RectangleShape joueur, zoneDepl, bg1, bg2, bg3, rectangleRecharge, rectangleMunitions, rectangleMunitionsOutLine, 
+        rectanglePause;
     CircleShape ultArea;
     time_t start, end;
-    Text textMunitions, textVie, textUlt, textWave, textLevel, textRecharge, gameName;
-    Sprite persoSprite, persoSpriteAtt, viesSprite, ultSprite, dgtultSprite, startButton, optionButton, exitButton, editorButton, obstacleSprite, backButton, level1Button, level2Button, level3Button, level4Button, level5Button;
-    Texture persoTexture, persoTextureAtt, viesTextureFull, viesTexture0, viesTexture1, viesTexture2, bg1Texture, bg2Texture, bg3Texture, hermesText, ultTexture, dgtultTexture, startTexture, optionTexture, exitTexture, editorTexture, powerUpTexture1, powerUpTexture2, powerUpTexture3, obstacleTexture, backTexture, level1ButtonTexture, level2ButtonTexture, level3ButtonTexture, level4ButtonTexture, level5ButtonTexture, poseidonTexture;;
+    Text textMunitions, textVie, textUlt, textWave, textLevel, textRecharge, gameName, textOption, volume, textGameOver;
+
+    Sprite persoSprite, persoSpriteAtt, viesSprite, ultSprite, dgtultSprite, startButton, optionButton, exitButton, 
+        editorButton, obstacleSprite, backButton, level1Button, level2Button, level3Button, level4Button, level5Button, 
+        plusSprite, moinsSprite, bgGameOverSprite;
+
+    Texture persoTexture, persoTextureAtt, viesTextureFull, viesTexture0, viesTexture1, viesTexture2, 
+        bg1Texture, bg2Texture, bg3Texture, bgOption, hermesText, ultTexture, dgtultTexture, startTexture, optionTexture, 
+        exitTexture, editorTexture, powerUpTexture1, powerUpTexture2, powerUpTexture3, obstacleTexture, backTexture, 
+        level1ButtonTexture, level2ButtonTexture, level3ButtonTexture, level4ButtonTexture, level5ButtonTexture, 
+        poseidonTexture, plusTexture, moinsTexture, bgGameOverTexture;
+
     Mouse mouse;
     Personnage personnage;
     int enAttaque = 0;
@@ -46,6 +56,7 @@ public:
     void boucleDeJeu();
     void resize(Texture& texture, Sprite& sprite, float scaleX, float scaleY);
     void moveBg(Sprite& sprite, float speedX, float speedY);
+    int itSound = 0;
 };
 
 #endif
