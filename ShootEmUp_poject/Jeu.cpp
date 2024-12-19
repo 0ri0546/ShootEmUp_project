@@ -32,6 +32,7 @@ Jeu::Jeu(int score) : score(score) {
     if (!bgOption.loadFromFile("bgOption.png")) {}
     if (!bgGameOverTexture.loadFromFile("bgGameOver.png")) {}
     if (!hermesMunTexture.loadFromFile("munitionHermes.png")) {}
+    if (!poseidonMunTexture.loadFromFile("munition.png")) {}
 }
 void Jeu::resize(Texture& texture, Sprite& sprite, float scaleX, float scaleY) {
     sprite.setTexture(texture);
@@ -57,9 +58,14 @@ void Jeu::boucleDeJeu() {
     sf::SoundBuffer death;
     if (!death.loadFromFile("death.mp3"));
     sf::Sound soundDeath;
-
     soundDeath.setBuffer(death);
     soundDeath.setVolume(50);
+
+    sf::SoundBuffer gunshot;
+    if (!death.loadFromFile("gunshot.mp3"));
+    sf::Sound soundGunshot;
+    soundGunshot.setBuffer(death);
+    soundGunshot.setVolume(50);
     
 
     int spriteAnimation = 0;
@@ -138,11 +144,9 @@ void Jeu::boucleDeJeu() {
     vector<Munitions>mun;
     vector<Hermes> hermes;
     Hermes hermes1(100, 100, hermesText);
-    
 
     bool pause = false;
     while (window.isOpen()) {
-        
         
         sf::Event event;
         if (ultime == 0) { if (!ultTexture.loadFromFile("ult9.png")) {} }
@@ -157,7 +161,8 @@ void Jeu::boucleDeJeu() {
         resize(ultTexture, ultSprite, 100.0f, 100.0f);
         ultSprite.setPosition(20, HEIGHT - 120);
 
-
+        float posX = personnage.getPositionX();
+        float posY = personnage.getPositionY();
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 window.close();
@@ -215,9 +220,13 @@ void Jeu::boucleDeJeu() {
                     plusSprite.getGlobalBounds().top && sf::Mouse::getPosition(window).y
                     < (plusSprite.getGlobalBounds().top + plusSprite.getGlobalBounds().height)) {
                     sound.setVolume(sound.getVolume() + 1.f);
+                    soundDeath.setVolume(sound.getVolume() + 1.f);
+                    soundGunshot.setVolume(sound.getVolume() + 1.f);
                     if (sound.getVolume() >= 75)
                     {
                         sound.setVolume(75);
+                        soundDeath.setVolume(75);
+                        soundGunshot.setVolume(75);
                     }
                     
                 }
@@ -231,7 +240,16 @@ void Jeu::boucleDeJeu() {
                 }
 
             }
-            if (gameState == GameState::Pause) {}
+            if (gameState == GameState::Pause) {
+                if (event.key.code == Mouse::Left && sf::Mouse::getPosition(window).x > backButton.getGlobalBounds().left &&
+                    sf::Mouse::getPosition(window).x < backButton.getGlobalBounds().left +
+                    backButton.getGlobalBounds().width && sf::Mouse::getPosition(window).y >
+                    backButton.getGlobalBounds().top && sf::Mouse::getPosition(window).y
+                    < (backButton.getGlobalBounds().top + backButton.getGlobalBounds().height)) {
+                    persoSprite.setPosition(posX, posY);
+                    gameState = GameState::Jeu;
+                }
+            }
 
             if (gameState == GameState::MenuStart) {
                 if (event.key.code == Mouse::Left && sf::Mouse::getPosition(window).x > startButton.getGlobalBounds().left &&
@@ -271,12 +289,14 @@ void Jeu::boucleDeJeu() {
                         start = time(nullptr);
                         personnage.mun.push_back(Munitions(joueur.getPosition().x - TAILLEX / 2, joueur.getPosition().y));
                         personnage.setMunitions(personnage.getMunitions() - 1);
+                        soundGunshot.play();
                     }
                     end = time(nullptr);
                     if (end - start > 0) {
                         premierTir = false;
                         personnage.mun.push_back(Munitions(joueur.getPosition().x - TAILLEX / 2, joueur.getPosition().y));
                         personnage.setMunitions(personnage.getMunitions() - 1);
+                        soundGunshot.play();
                     }
                     else { premierTir = false; }
                     start = time(nullptr);
@@ -295,14 +315,15 @@ void Jeu::boucleDeJeu() {
             }
             float posX = personnage.getPositionX();
             float posY = personnage.getPositionY();
+
+
             if (event.type == Event::KeyPressed) {
                 if (event.key.code == Keyboard::P && Game != "ult") {
                     pause = true;
                     gameState = GameState::Pause;
-                    personnage.creerPieceRectangle(rectanglePause, Color(255, 255, 255, 150), WIDTH, HEIGHT, 0, 0);
-                    window.draw(rectanglePause);
-                    window.display();
+                    
                 }
+
                 if (event.key.code == Keyboard::A) pause = false;
                 if (gameState == GameState::Pause && !pause) { // ------------------------------------------------PAUSE-------------------------------------
                     persoSprite.setPosition(posX, posY);
@@ -355,9 +376,7 @@ void Jeu::boucleDeJeu() {
             window.draw(backButton);
         }
         if (gameState == GameState::levelEditor) {
-            
             backButton.setPosition(WIDTH / 2 - backButton.getGlobalBounds().width / 2 - 400, HEIGHT / 2 - backButton.getGlobalBounds().height / 2 + 350);
-
             backButton.setScale(.4f, .4f);
             window.draw(backButton);
 
@@ -371,6 +390,24 @@ void Jeu::boucleDeJeu() {
             window.draw(backButton);
             window.draw(level1Button);
         }
+
+        if (gameState == GameState::Pause) {
+
+            backButton.setPosition(WIDTH / 2 - backButton.getGlobalBounds().width / 2 - 400, HEIGHT / 2 - backButton.getGlobalBounds().height / 2 + 350);
+            level1Button.setPosition(WIDTH / 2 - backButton.getGlobalBounds().width / 2 - 400, HEIGHT / 2 - backButton.getGlobalBounds().height / 2);
+            backButton.setScale(.4f, .4f);
+            level1Button.setScale(.3f, .3f);
+
+            personnage.creerText(indicateurVies, "Nombre de vies :", 100, Color::White, 50, 50, fontMunition);
+            indicateurVies.setPosition(WIDTH / 2 - indicateurVies.getGlobalBounds().width / 2, HEIGHT / 2 - indicateurVies.getGlobalBounds().height / 2 - 300);
+
+            window.draw(bgOptionSprite);
+            window.draw(backButton);
+            window.draw(indicateurVies);
+            viesSprite.setPosition(WIDTH / 2 - viesSprite.getGlobalBounds().width / 2, HEIGHT / 2 - viesSprite.getGlobalBounds().height / 2 );
+            window.draw(viesSprite);
+        }
+
         if (gameState == GameState::OptionMenu) {
             window.draw(bgOptionSprite);
             string text = "Parametres audio";
@@ -392,8 +429,6 @@ void Jeu::boucleDeJeu() {
             moinsSprite.setPosition(WIDTH / 2 - plusSprite.getGlobalBounds().width / 2 + 200, HEIGHT / 2 - plusSprite.getGlobalBounds().height / 2);
             moinsSprite.setScale(3.4f, 3.4f);
             window.draw(moinsSprite);
-
-
         }
         if (gameState == GameState::Jeu && gameState != GameState::Pause) {
             enAttaquePerso++;
@@ -499,8 +534,6 @@ void Jeu::boucleDeJeu() {
 
                 if (enAttaque > 0) { window.draw(persoSpriteAtt); enAttaque++; }
                 if (enAttaque >= enAttaqueMax) { enAttaque = 0;  window.draw(persoSprite); }
-                
-
                 
 
                 window.draw(textMunitions);
@@ -728,9 +761,49 @@ void Jeu::boucleDeJeu() {
                     }
                 }
                 if (vague == VagueState::Boss) {
+                    delayAttBoss++;
+                    cout << delayAttBoss << endl;
                     if (pose.size() > 0) {
                         for (auto it = pose.begin(); it != pose.end();) {
                             window.draw(it->poseidon);
+
+                            if (movingRight) {
+                                it->poseidon.move(1.5f, 0.0f);
+                                if (it->poseidon.getPosition().x + it->poseidon.getGlobalBounds().width >= WIDTH) {
+                                    movingRight = false;
+                                }
+                            }
+                            else {
+                                it->poseidon.move(-1.5f, 0.0f);
+                                if (it->poseidon.getPosition().x <= 0) {
+                                    movingRight = true;
+                                }
+                            }
+
+                            if (delayAttBoss >= 75) {
+                                Munitions newMunition(
+                                    it->poseidon.getPosition().x + it->poseidon.getGlobalBounds().width / 2,
+                                    it->poseidon.getPosition().y + it->poseidon.getGlobalBounds().height);
+                                newMunition.mun.setTexture(poseidonMunTexture); // Définir la texture de la munition
+                                it->mun.push_back(newMunition); 
+                                delayAttBoss = 0;
+                            }
+                            for (auto munIt = it->mun.begin(); munIt != it->mun.end();) {
+                                munIt->mun.move(0.f, 5.f);
+                                window.draw(munIt->mun);
+
+                                if (munIt->mun.getGlobalBounds().intersects(persoSprite.getGlobalBounds())) {
+                                    personnage.vies -= 1;
+                                    munIt = it->mun.erase(munIt);
+                                    continue;
+                                }
+                                else if (munIt->mun.getPosition().y > HEIGHT) {
+                                    munIt = it->mun.erase(munIt);
+                                    continue;
+                                }
+                                ++munIt;
+                            }
+
                             //it->depEnnemisRight(pose, 1.f);
 
                             /*it->poseidon.move(1.f,1.f);
@@ -759,18 +832,14 @@ void Jeu::boucleDeJeu() {
                                     it->vies -= 1;
                                     personnage.score += 1;
                                     continue;
-
-
                                 }
 
                                 itt++;
                             }
-
                             it++;
                         }
                     }
                 }
-                
                 
                 for (auto it = power1.begin(); it != power1.end();) {
                     window.draw(it->powerUp);
@@ -796,7 +865,6 @@ void Jeu::boucleDeJeu() {
                         continue; }
                     it++;
                 }
-                //--------------------------Deplacemment des ennemis----------------------------------------------------------------------
                 window.draw(viesSprite);
 
                 moveBg(bg2Sprite, 0.0f, -0.5f);
@@ -806,10 +874,6 @@ void Jeu::boucleDeJeu() {
                 if (ultState == 2) { window.draw(dgtultSprite); }
                 window.draw(persoSprite);
             }
-            
-
-                  
-            
         }
         window.display();
     }
