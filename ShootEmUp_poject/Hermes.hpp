@@ -18,7 +18,7 @@ class Hermes {
     
 public:
     void deplacement();
-    void attaque(RectangleShape& rectangle, RenderWindow& window, int spriteAnimation);
+    void attaque(RectangleShape& rectangle, RenderWindow& window, int spriteAnimation, Texture& texture);
     void incr_score();
     void drop();
     void setVies(int nouvelleVies);

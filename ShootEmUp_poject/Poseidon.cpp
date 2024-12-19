@@ -35,8 +35,28 @@ void Poseidon::deplacement(int velocity) {
         rectangle.setPosition(targetPosition);
     }
 }
+void Poseidon::depEnnemisRight(vector<Poseidon>& pose, int velocity) { //deplace les ennemis dans le vecteur hermes en diagonale, et rebondi sur tous les wall
+    static vector<int> directions(pose.size(), 1);
+    static vector<int> verticalDirections(pose.size(), 1);
+    static vector<float> delays(pose.size(), 0);
+    float delayBetweenEnemies = 0.3f;
+    float vitesse = 1.f * velocity;
+    for (size_t i = 0; i < pose.size(); ++i) {
+        Poseidon& pose = pose[i];
+        Vector2f position = pose.getPosition();
 
-bool Poseidon::attaque(RectangleShape& rectangle, Event event, RenderWindow& window, int spriteAnimation) {
+        if (delays[i] < i * delayBetweenEnemies) { delays[i] += vitesse; continue; }
+        pose.hermes.move(vitesse * -directions[i], vitesse * verticalDirections[i]);
+        if (position.x + vitesse >= WIDTH - pose.hermes.getGlobalBounds().width) { directions[i] = 1; }
+        else if (position.x - vitesse <= 0) { directions[i] = -1; }
+        if (position.y + vitesse >= HEIGHT / 2) { verticalDirections[i] = -1; }
+        else if (position.y <= 0) { verticalDirections[i] = 1; }
+    }
+}
+void Poseidon::attaque(RectangleShape& rectangle, RenderWindow& window, int spriteAnimation) {
+
+    mun.push_back(Munitions(poseidon.getPosition().x, poseidon.getPosition().y));
+
     for (auto it = mun.begin(); it != mun.end(); ) {
         Texture test;
 
@@ -50,15 +70,11 @@ bool Poseidon::attaque(RectangleShape& rectangle, Event event, RenderWindow& win
         it->mun.setTexture(test);
 
         window.draw(it->mun);
-        it->mun.move(0.f, -10.f);
+        it->mun.move(0.f, 10.f);
 
         if (it->mun.getPosition().y + test.getSize().y + 20 < 0) { it = mun.erase(it); }
         else { ++it; }
     }
-    / for (auto& elem : mun) {
-        cout << elem.getPosX() << endl;
-    } /
-        return true;
 }
 
 void Poseidon::ult(RectangleShape& rectangle, Event event, RenderWindow& window) {

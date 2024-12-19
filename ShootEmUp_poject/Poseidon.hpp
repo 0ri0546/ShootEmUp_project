@@ -39,7 +39,7 @@ public:
     };
 
     void deplacement(int velocity);
-    bool attaque(RectangleShape& rectangle, Event event, RenderWindow& window, int spriteAnimation);
+    void attaque(RectangleShape& rectangle, RenderWindow& window, int spriteAnimation);
     void ult(RectangleShape& rectangle, Event event, RenderWindow& window);
     void setTexture(RectangleShape& rectangle, const Texture* texture);
     void setVies(int nouvelleVie);
@@ -47,7 +47,7 @@ public:
     void setTauxUtlime(float NouveauTauxUlt);
     int getVies();
     int getMunitions();
-
+    void depEnnemisRight(vector<Poseidon>& pose, int velocity);
 
 
 

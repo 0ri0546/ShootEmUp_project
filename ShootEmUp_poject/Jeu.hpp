@@ -35,7 +35,7 @@ private:
         bg1Texture, bg2Texture, bg3Texture, bgOption, hermesText, ultTexture, dgtultTexture, startTexture, optionTexture, 
         exitTexture, editorTexture, powerUpTexture1, powerUpTexture2, powerUpTexture3, obstacleTexture, backTexture, 
         level1ButtonTexture, level2ButtonTexture, level3ButtonTexture, level4ButtonTexture, level5ButtonTexture, 
-        poseidonTexture, plusTexture, moinsTexture, bgGameOverTexture;
+        poseidonTexture, plusTexture, moinsTexture, bgGameOverTexture, hermesMunTexture;
 
     Mouse mouse;
     Personnage personnage;
