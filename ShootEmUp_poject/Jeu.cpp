@@ -535,6 +535,7 @@ void Jeu::boucleDeJeu() {
                         window.draw(itt->mun);
                         itt->mun.move(0.f, 5.f);
                         if (itt->mun.getGlobalBounds().intersects(persoSprite.getGlobalBounds())) {
+                            personnage.vies -= 1;
                             itt = it->mun.erase(itt);
                             continue;
                         }
@@ -594,7 +595,7 @@ void Jeu::boucleDeJeu() {
                         }
                         if (hermes.size() == 0) {
 
-                            vague = VagueState::Boss;
+                            vague = VagueState::Vague2;
                             phase = PhaseState::Phase1;
                             creerVague = true;
                         }
