@@ -25,7 +25,8 @@ private:
         rectanglePause;
     CircleShape ultArea;
     time_t start, end;
-    Text textMunitions, textVie, textUlt, textWave, textLevel, textRecharge, gameName, textOption, volume, textGameOver, indicateurVies;
+    Text textMunitions, textVie, textUlt, textWave, textLevel, textRecharge, gameName, textOption, volume, textGameOver, 
+        indicateurVies;
 
     Sprite persoSprite, persoSpriteAtt, viesSprite, ultSprite, dgtultSprite, startButton, optionButton, exitButton, 
         editorButton, obstacleSprite, backButton, level1Button, level2Button, level3Button, level4Button, level5Button, 

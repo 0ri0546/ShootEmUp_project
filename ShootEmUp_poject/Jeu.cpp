@@ -44,11 +44,13 @@ void Jeu::resize(Texture& texture, Sprite& sprite, float scaleX, float scaleY) {
 void Jeu::moveBg(Sprite& sprite, float speedX, float speedY) {
     sprite.move(speedX, -speedY);
 }
-std::vector<sf::Vector2f> enemyPositions;
-std::vector<Poseidon> customEnemies;
+
+vector<Vector2f> enemyPositions; // Pour editeur de lvl
+vector<Poseidon> customEnemies;
 
 void Jeu::boucleDeJeu() {
 
+    //--------------------------------------------------load les sons-------------------
     sf::SoundBuffer buffer;
     if (!buffer.loadFromFile("soundFond.mp3"));
     sf::Sound sound;
@@ -56,19 +58,17 @@ void Jeu::boucleDeJeu() {
     sound.setLoop(true);
     sound.setVolume(50);
     sound.play();
-
     sf::SoundBuffer death;
     if (!death.loadFromFile("death.mp3"));
     sf::Sound soundDeath;
     soundDeath.setBuffer(death);
     soundDeath.setVolume(50);
-
     sf::SoundBuffer gunshot;
     if (!death.loadFromFile("gunshot.mp3"));
     sf::Sound soundGunshot;
     soundGunshot.setBuffer(death);
     soundGunshot.setVolume(50);
-
+    //--------------------------------------------------load les sons-------------------
 
     int spriteAnimation = 0;
     string Game = "jeu";
@@ -84,7 +84,6 @@ void Jeu::boucleDeJeu() {
     Font fontMunition;
     fontMunition.loadFromFile("god.ttf");
     RenderWindow window(VideoMode(WIDTH, HEIGHT), "Mount Olympus");
-    //Texture hermestext;
     vector<PowerUp> power1;
     vector<PowerUp> power2;
     vector<PowerUp> power3;
@@ -99,10 +98,12 @@ void Jeu::boucleDeJeu() {
     VagueState vague = VagueState::Vague1;
     PhaseState phase = PhaseState::Phase1;
 
-    srand(static_cast<unsigned>(time(nullptr))); // pour les obstacles
+    //--------------------------------------------------pour les obstacles-------------------
+    srand(static_cast<unsigned>(time(nullptr))); 
     vector<Obstacle> obstacles;
     Clock obstacleClock;
     float obstacleSpawnInterval = 2.f;
+    //--------------------------------------------------pour les obstacles-------------------
 
     resize(persoTexture, persoSprite, 60.0f, 70.0f);
     resize(persoTextureAtt, persoSpriteAtt, 60.0f, 70.0f);
@@ -146,17 +147,17 @@ void Jeu::boucleDeJeu() {
     vector<Munitions>mun;
     vector<Hermes> hermes;
     Hermes hermes1(100, 100, hermesText);
+
+    //--------------------------------------------------pour l'editeur de lvl-------------------
     Sprite enemyPlaceholder;
     enemyPlaceholder.setTexture(poseidonTexture);
     enemyPlaceholder.setScale(0.3f, 0.3f);
+    //--------------------------------------------------pour l'editeur de lvl-------------------
 
     bool pause = false;
     while (window.isOpen()) {
-        if (gameState == GameState::Jeu)
-        {
-            cout << "test" << endl;
-        }
         sf::Event event;
+        //--------------------------------------------------pour la texture de l'ultime-------------------
         if (ultime == 0) { if (!ultTexture.loadFromFile("ult9.png")) {} }
         else if (ultime <= 12.5) { if (!ultTexture.loadFromFile("ult8.png")) {} }
         else if (ultime <= 25.0) { if (!ultTexture.loadFromFile("ult7.png")) {} }
@@ -168,16 +169,16 @@ void Jeu::boucleDeJeu() {
         else if (ultime <= 100.0) { if (!ultTexture.loadFromFile("ult1.png")) {} }
         resize(ultTexture, ultSprite, 100.0f, 100.0f);
         ultSprite.setPosition(20, HEIGHT - 120);
+        //--------------------------------------------------pour la texture de l'ultime-------------------
 
-        float posX = personnage.getPositionX();
+        float posX = personnage.getPositionX(); // recupperer la position pour setPosition apres l'ultime
         float posY = personnage.getPositionY();
+
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
+            if (event.type == sf::Event::Closed) { //fermer la fenetre
                 window.close();
             }
-            if (event.type == sf::Event::Closed) {
-                window.close();
-            }
+
             if (gameState == GameState::GameOver) {
                 if (event.key.code == Mouse::Left && sf::Mouse::getPosition(window).x > backButton.getGlobalBounds().left &&
                     sf::Mouse::getPosition(window).x < backButton.getGlobalBounds().left +
@@ -236,7 +237,6 @@ void Jeu::boucleDeJeu() {
                         soundDeath.setVolume(75);
                         soundGunshot.setVolume(75);
                     }
-
                 }
                 if (event.key.code == Mouse::Left && sf::Mouse::getPosition(window).x > moinsSprite.getGlobalBounds().left &&
                     sf::Mouse::getPosition(window).x < moinsSprite.getGlobalBounds().left +
@@ -256,7 +256,6 @@ void Jeu::boucleDeJeu() {
                     gameState = GameState::Jeu;
                 }
             }
-
             if (gameState == GameState::MenuStart) {
                 if (event.key.code == Mouse::Left && sf::Mouse::getPosition(window).x > startButton.getGlobalBounds().left &&
                     sf::Mouse::getPosition(window).x < startButton.getGlobalBounds().left +
@@ -289,9 +288,9 @@ void Jeu::boucleDeJeu() {
             }
             if (gameState == GameState::Jeu) {
                 if (event.key.code == Keyboard::Space && personnage.getMunitions() > 0 && dontMove == 0 && ultState == 0 && gameState != GameState::Pause) {
-                    enAttaque++;
+                    enAttaque++; //pour l'animation d'attaque
                     if (premierTir) {
-                        start = time(nullptr);
+                        start = time(nullptr); //pour le premier tir
                         personnage.mun.push_back(Munitions(joueur.getPosition().x - TAILLEX / 2, joueur.getPosition().y));
                         personnage.setMunitions(personnage.getMunitions() - 1);
                         soundGunshot.play();
@@ -308,8 +307,7 @@ void Jeu::boucleDeJeu() {
                 }
                 if (event.key.code == Keyboard::R && ultState == 0) {
                     personnage.setMunitions(32);
-                    dontMove++;
-                    cout << "recharge" << endl;
+                    dontMove++; //ne peut plus tirer
                 }
                 if (event.key.code == Keyboard::U && ultState == 0 && ultime >= 100) {
                     Game = "ult";
@@ -318,22 +316,13 @@ void Jeu::boucleDeJeu() {
                     initialPosition = persoSprite.getPosition();
                 }
             }
-            float posX = personnage.getPositionX();
-            float posY = personnage.getPositionY();
-
-
             if (event.type == Event::KeyPressed) {
                 if (event.key.code == Keyboard::P && Game != "ult") {
                     pause = true;
                     gameState = GameState::Pause;
-
                 }
-
-                if (event.key.code == Keyboard::A) pause = false;
-                if (gameState == GameState::Pause && !pause) { // ------------------------------------------------PAUSE-------------------------------------
-                    persoSprite.setPosition(posX, posY);
-                    gameState = GameState::Jeu;
-                }
+                if (event.key.code == Keyboard::A) { pause = false; }
+                if (gameState == GameState::Pause && !pause) { persoSprite.setPosition(posX, posY); gameState = GameState::Jeu; }
             }
         }
         //------------------------------------------------------------Obstacles------------------------------------------------------
@@ -342,19 +331,17 @@ void Jeu::boucleDeJeu() {
             obstacles.emplace_back(randomX, 0, 50, 100, 5.0f, &obstacleTexture);
             obstacleClock.restart();
         }
-
-
+        //------------------------------------------------------------Obstacles------------------------------------------------------
 
         window.clear();
-        if (gameState == GameState::MenuStart) {
 
+        if (gameState == GameState::MenuStart) {
             personnage.creerText(gameName, "MOUNT OLYMPUS", 64, Color::White, WIDTH / 2, HEIGHT / 2, fontMunition);
             gameName.setPosition(WIDTH / 2 - gameName.getGlobalBounds().width / 2, HEIGHT / 2 - gameName.getGlobalBounds().height / 2 - 300);
             startButton.setPosition(WIDTH / 2 - startButton.getGlobalBounds().width / 2 - 200, HEIGHT / 2 - startButton.getGlobalBounds().height / 2 - 100);
             optionButton.setPosition(WIDTH / 2 - startButton.getGlobalBounds().width / 2 + 200, HEIGHT / 2 - startButton.getGlobalBounds().height / 2 - 100);
             exitButton.setPosition(WIDTH / 2 - startButton.getGlobalBounds().width / 2 + 200, HEIGHT / 2 - startButton.getGlobalBounds().height / 2 + 100);
             editorButton.setPosition(WIDTH / 2 - startButton.getGlobalBounds().width / 2 - 200, HEIGHT / 2 - startButton.getGlobalBounds().height / 2 + 100);
-
             window.draw(bgOptionSprite);
             window.draw(gameName);
             window.draw(startButton);
@@ -362,14 +349,10 @@ void Jeu::boucleDeJeu() {
             window.draw(optionButton);
             window.draw(editorButton);
         }
-
         if (gameState == GameState::GameOver) {
             soundDeath.setVolume(sound.getVolume());
             sound.pause();
-            if (itSound != 0 && itSound < 5)
-            {
-                soundDeath.play();
-            }
+            if (itSound != 0 && itSound < 5) { soundDeath.play(); }
             itSound++;
 
             window.draw(bgGameOverSprite);
@@ -385,23 +368,15 @@ void Jeu::boucleDeJeu() {
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
                 sf::Vector2i mousePos = sf::Mouse::getPosition(window);
                 sf::Vector2f worldPos(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
-
                 enemyPositions.push_back(worldPos);
             }
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right) {
-                if (!enemyPositions.empty()) {
-                    enemyPositions.pop_back();
-                }
+                if (!enemyPositions.empty()) { enemyPositions.pop_back(); }
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Enter) {
-                customEnemies.clear();
-                for (const auto& pos : enemyPositions) {
-                    customEnemies.emplace_back(pos.x, pos.y, poseidonTexture);
-                }
-                enemyPositions.clear();
+                for (const auto& pos : enemyPositions) { customEnemies.emplace_back(pos.x, pos.y, poseidonTexture); }
                 gameState = GameState::Jeu;
             }
-            
             window.draw(bgOptionSprite);
             for (const auto& pos : enemyPositions) {
                 enemyPlaceholder.setPosition(pos);
@@ -413,7 +388,6 @@ void Jeu::boucleDeJeu() {
         }
 
         if (gameState == GameState::LevelSelect) {
-
             backButton.setPosition(WIDTH / 2 - backButton.getGlobalBounds().width / 2 - 400, HEIGHT / 2 - backButton.getGlobalBounds().height / 2 + 350);
             level1Button.setPosition(WIDTH / 2 - backButton.getGlobalBounds().width / 2 - 400, HEIGHT / 2 - backButton.getGlobalBounds().height / 2);
             backButton.setScale(.4f, .4f);
@@ -424,15 +398,12 @@ void Jeu::boucleDeJeu() {
         }
 
         if (gameState == GameState::Pause) {
-
             backButton.setPosition(WIDTH / 2 - backButton.getGlobalBounds().width / 2 - 400, HEIGHT / 2 - backButton.getGlobalBounds().height / 2 + 350);
             level1Button.setPosition(WIDTH / 2 - backButton.getGlobalBounds().width / 2 - 400, HEIGHT / 2 - backButton.getGlobalBounds().height / 2);
             backButton.setScale(.4f, .4f);
             level1Button.setScale(.3f, .3f);
-
             personnage.creerText(indicateurVies, "Nombre de vies :", 100, Color::White, 50, 50, fontMunition);
             indicateurVies.setPosition(WIDTH / 2 - indicateurVies.getGlobalBounds().width / 2, HEIGHT / 2 - indicateurVies.getGlobalBounds().height / 2 - 300);
-
             window.draw(bgOptionSprite);
             window.draw(backButton);
             window.draw(indicateurVies);
@@ -443,8 +414,8 @@ void Jeu::boucleDeJeu() {
         if (gameState == GameState::OptionMenu) {
             window.draw(bgOptionSprite);
             string text = "Parametres audio";
-            int th = roundl(sound.getVolume());
-            string vol = "" + to_string(th);
+            int th = roundl(sound.getVolume()); // arrondir
+            string vol = "" + to_string(th); // transformer en string
             personnage.creerText(textOption, text, 100, Color::White, WIDTH / 2 - plusSprite.getGlobalBounds().width / 2 - text.size() * 50 / 2, 50, fontMunition);
             textOption.setPosition(WIDTH / 2 - textOption.getGlobalBounds().width / 2, HEIGHT / 2 - textOption.getGlobalBounds().height / 2 - 300);
             personnage.creerText(volume, vol, 50, Color::White, WIDTH / 2 - 50 / 2, HEIGHT / 2 - plusSprite.getGlobalBounds().height / 2, fontMunition);
@@ -453,52 +424,43 @@ void Jeu::boucleDeJeu() {
             backButton.setPosition(WIDTH / 2 - backButton.getGlobalBounds().width / 2 - 400, HEIGHT / 2 - backButton.getGlobalBounds().height / 2 + 350);
             backButton.setScale(.4f, .4f);
             window.draw(backButton);
-
             plusSprite.setPosition(WIDTH / 2 - plusSprite.getGlobalBounds().width / 2 - 200, HEIGHT / 2 - plusSprite.getGlobalBounds().height / 2);
             plusSprite.setScale(3.4f, 3.4f);
             window.draw(plusSprite);
-
             moinsSprite.setPosition(WIDTH / 2 - plusSprite.getGlobalBounds().width / 2 + 200, HEIGHT / 2 - plusSprite.getGlobalBounds().height / 2);
             moinsSprite.setScale(3.4f, 3.4f);
             window.draw(moinsSprite);
         }
         if (gameState == GameState::Jeu && gameState != GameState::Pause) {
-
             enAttaquePerso++;
-            if (enAttaquePerso == 100) {
-                enAttaquePerso = 0;
-            }
+            if (enAttaquePerso == 100) { enAttaquePerso = 0; }
             for (auto it = obstacles.begin(); it != obstacles.end();) {
                 it->move();
-
                 if (it->shape.getGlobalBounds().intersects(persoSprite.getGlobalBounds())) {
                     personnage.setVies(personnage.getVies() - 1);
                     it = obstacles.erase(it);
                     continue;
                 }
-
                 if (it->estDansLesLimites(HEIGHT)) {
                     it = obstacles.erase(it);
                     continue;
                 }
-
                 ++it;
             }
             if (level == LevelState::Level1) {
-
                 if (personnage.vies == 0) {
                     window.clear();
                     gameState = GameState::GameOver;
                     itSound++;
                 }
-
-
+                //-------------------------------------------Charger la texture corespondant au nb de vie-----------------------------------
                 if (personnage.getVies() == 3) { resize(viesTextureFull, viesSprite, 100.0f, 70.0f); }
                 if (personnage.getVies() == 2) { resize(viesTexture2, viesSprite, 100.0f, 70.0f); }
                 if (personnage.getVies() == 1) { resize(viesTexture1, viesSprite, 100.0f, 70.0f); }
                 if (personnage.getVies() == 0) { resize(viesTexture0, viesSprite, 100.0f, 70.0f); }
-
                 viesSprite.setPosition(joueur.getPosition().x - TAILLEX / 4, joueur.getPosition().y + TAILLEY / 2);
+                //-------------------------------------------Charger la texture corespondant au nb de vie-----------------------------------
+
                 if (Game == "ult") {
                     int vies = personnage.getVies();
                     if (ultState == 1) {
@@ -511,14 +473,12 @@ void Jeu::boucleDeJeu() {
                         dgtultSprite.setPosition(centerX - 100, centerY - 100);
                         dgtultSprite.setColor(couleurAvecOpacite);
                         if (ultTimer.getElapsedTime().asSeconds() >= 1.0f) { ultState = 3; }
-
                         FloatRect ultBounds = dgtultSprite.getGlobalBounds();
                         for (auto it = hermes.begin(); it != hermes.end();) {
                             if (ultBounds.intersects(it->hermes.getGlobalBounds())) { it->vie = 0; it = hermes.erase(it); }
                             else { ++it; }
                         }
                     }
-
                     else if (ultState == 3) {
                         persoSprite.setPosition(initialPosition);
                         ultState = 0;
@@ -530,9 +490,7 @@ void Jeu::boucleDeJeu() {
 
                 if (Game == "jeu") { persoSprite.setPosition(joueur.getPosition()); persoSpriteAtt.setPosition(joueur.getPosition()); }
 
-
                 window.setFramerateLimit(60);
-
                 window.draw(bg1Sprite);
                 window.draw(bg2Sprite);
                 window.draw(bg3Sprite);
@@ -540,8 +498,6 @@ void Jeu::boucleDeJeu() {
                 for (const auto& obstacle : obstacles) { //---afficher les obstacles------------------------
                     window.draw(obstacle.shape);
                 }
-
-                personnage.creerText(textRecharge, "EN RECHARGE", 30, Color::Black, WIDTH - WIDTH / 3 + 70, HEIGHT - 150, fontMunition);
                 if (dontMove >= 150) dontMove = 0;
                 if (dontMove != 0) {
                     dontMove++;
@@ -552,7 +508,6 @@ void Jeu::boucleDeJeu() {
 
                 spriteAnimation++;
                 if (spriteAnimation == 70) spriteAnimation = 0;
-
                 personnage.creerPieceRectangle(rectangleMunitions, Color::White, personnage.getMunitions() * 7, 30, WIDTH - WIDTH / 3 + 20, HEIGHT - 70);
                 rectangleMunitionsOutLine.setFillColor(Color::Transparent);
                 rectangleMunitionsOutLine.setOutlineThickness(3);
@@ -560,14 +515,12 @@ void Jeu::boucleDeJeu() {
                 rectangleMunitionsOutLine.setPosition(Vector2f(WIDTH - WIDTH / 3 + 20, HEIGHT - 70));
                 rectangleMunitionsOutLine.setSize(Vector2f(32 * 7 + 50, 30));
                 personnage.creerText(textMunitions, to_string(personnage.getMunitions()), 30, Color::Black, WIDTH - WIDTH / 3 + 32 * 7 + 30, HEIGHT - 73, fontMunition);
-
                 window.draw(textMunitions);
                 window.draw(rectangleMunitions);
                 window.draw(rectangleMunitionsOutLine);
 
-                if (enAttaque > 0) { window.draw(persoSpriteAtt); enAttaque++; }
+                if (enAttaque > 0) { window.draw(persoSpriteAtt); enAttaque++; } //changer de sprite de perso en fonction de enAttaque
                 if (enAttaque >= enAttaqueMax) { enAttaque = 0;  window.draw(persoSprite); }
-
 
                 window.draw(textMunitions);
                 window.draw(textUlt);
@@ -576,28 +529,20 @@ void Jeu::boucleDeJeu() {
                 for (auto it = hermes.begin(); it != hermes.end();) {
                     if (enAttaquePerso == 1) {
                         it->attaque(joueur, window, spriteAnimation, hermesMunTexture);
-
                     }
-
-
                     for (auto itt = it->mun.begin(); itt != it->mun.end();) {
-
                         itt->mun.setTexture(hermesMunTexture);
                         window.draw(itt->mun);
-
                         itt->mun.move(0.f, 5.f);
-
                         if (itt->mun.getGlobalBounds().intersects(persoSprite.getGlobalBounds())) {
-
                             itt = it->mun.erase(itt);
-
                             continue;
-
                         }
                         itt++;
                     }
                     window.draw(it->hermes);
 
+                    //-------------------------------------------PowerUps-----------------------------------
                     if (it->vie == 0) {
                         int randPowerUp = rand() % 10;
                         ultime += 5.f;
@@ -607,6 +552,7 @@ void Jeu::boucleDeJeu() {
                         it = hermes.erase(it);
                         continue;
                     }
+                    //-------------------------------------------PowerUps-----------------------------------
 
                     for (auto& munition : personnage.mun) {
                         if (it->hermes.getGlobalBounds().intersects(munition.mun.getGlobalBounds())) { it->vie -= 1; personnage.score += 1; }
@@ -614,7 +560,6 @@ void Jeu::boucleDeJeu() {
                     it++;
                 }
                 if (vague == VagueState::Vague1 && vagueFinish == false) {
-
                     if (phase == PhaseState::Phase1) {
                         hermes1.patern(hermes, 0, 0, WIDTH / 2, HEIGHT, 1.f);
                         if (creerVague == true) {
@@ -625,7 +570,6 @@ void Jeu::boucleDeJeu() {
                             hermes1.creerEnnemis(hermes, 5, 0, 0);
                             phase = PhaseState::Phase2;
                             creerVague = true;
-
                         }
                     }
                     if (phase == PhaseState::Phase2) {
@@ -640,11 +584,8 @@ void Jeu::boucleDeJeu() {
                             hermes1.creerEnnemis(hermes, 3, WIDTH - 200, 0);
                             phase = PhaseState::Phase3;
                             creerVague = true;
-
                         }
                     }
-
-
                     if (phase == PhaseState::Phase3) {
                         hermes1.patern(hermes, 0, 0, WIDTH, HEIGHT, 1.f);
                         if (creerVague == true) {
@@ -656,20 +597,13 @@ void Jeu::boucleDeJeu() {
                             vague = VagueState::Boss;
                             phase = PhaseState::Phase1;
                             creerVague = true;
-
                         }
                     }
-
                 }
-
                 if (vague == VagueState::Vague2) {
-
-
                     if (phase == PhaseState::Phase1) {
-
                         hermes1.patern(hermes, 0, 0, WIDTH / 2, HEIGHT, 1.f);
                         if (creerVague == true) {
-                            cout << "vague2";
                             hermes1.creerEnnemis(hermes, 5, WIDTH / 2 - 300, 0);
                             hermes1.creerEnnemis(hermes, 3, WIDTH / 2, 0);
                             hermes1.creerEnnemis(hermes, 5, WIDTH / 2 + 300, 0);
@@ -679,11 +613,9 @@ void Jeu::boucleDeJeu() {
 
                             phase = PhaseState::Phase2;
                             creerVague = true;
-
                         }
                     }
                     if (phase == PhaseState::Phase2) {
-
                         hermes1.patern(hermes, 0, 0, 200, HEIGHT, 1.f);
                         if (creerVague == true) {
                             hermes1.creerEnnemis(hermes, 2, WIDTH / 2 + 400, 0);
@@ -693,10 +625,8 @@ void Jeu::boucleDeJeu() {
                             creerVague = false;
                         }
                         if (hermes.size() == 0) {
-
                             phase = PhaseState::Phase3;
                             creerVague = true;
-
                         }
                     }
                     if (phase == PhaseState::Phase3) {
@@ -711,34 +641,26 @@ void Jeu::boucleDeJeu() {
                             creerVague = false;
                         }
                         if (hermes.size() == 0) {
-
                             vague = VagueState::Vague3;
                             phase = PhaseState::Phase1;
                             creerVague = true;
-
                         }
                     }
                 }
                 if (vague == VagueState::Vague3) {
                     if (phase == PhaseState::Phase1) {
-
                         hermes1.patern(hermes, 0, 0, WIDTH / 2, HEIGHT, 1.f);
                         if (creerVague == true) {
-                            cout << "vague2";
                             hermes1.creerEnnemis(hermes, 15, WIDTH / 2, 0);
                             hermes1.creerEnnemis(hermes, 15, WIDTH / 2, HEIGHT / 2 + 200);
-
                             creerVague = false;
                         }
                         if (hermes.size() == 0) {
-
                             phase = PhaseState::Phase2;
                             creerVague = true;
-
                         }
                     }
                     if (phase == PhaseState::Phase2) {
-
                         hermes1.patern(hermes, 0, 0, 200, HEIGHT, 1.f);
                         if (creerVague == true) {
                             hermes1.creerEnnemis(hermes, 4, WIDTH / 2 + 400, 0);
@@ -748,10 +670,8 @@ void Jeu::boucleDeJeu() {
                             creerVague = false;
                         }
                         if (hermes.size() == 0) {
-
                             phase = PhaseState::Phase3;
                             creerVague = true;
-
                         }
                     }
                     if (phase == PhaseState::Phase3) {
@@ -766,40 +686,32 @@ void Jeu::boucleDeJeu() {
                             creerVague = false;
                         }
                         if (hermes.size() == 0) {
-
                             vague = VagueState::Vague4;
                             phase = PhaseState::Phase1;
                             creerVague = true;
-
                         }
                     }
                 }
                 if (vague == VagueState::Vague4) {
                     if (phase == PhaseState::Phase1) {
-
                         hermes1.patern(hermes, 0, 0, WIDTH / 2, HEIGHT, 1.f);
                         if (creerVague == true) {
-                            cout << "vague2";
                             hermes1.creerEnnemis(hermes, 15, WIDTH / 2, 0);
                             hermes1.creerEnnemis(hermes, 15, WIDTH / 2, HEIGHT / 2 + 200);
-
                             creerVague = false;
                         }
                         if (hermes.size() == 0) {
                             vague = VagueState::Boss;
                             phase = PhaseState::Phase1;
                             creerVague = true;
-
                         }
                     }
                 }
                 if (vague == VagueState::Boss) {
                     delayAttBoss++;
-                    cout << delayAttBoss << endl;
                     if (pose.size() > 0) {
                         for (auto it = pose.begin(); it != pose.end();) {
                             window.draw(it->poseidon);
-
                             if (movingRight) {
                                 it->poseidon.move(1.5f, 0.0f);
                                 if (it->poseidon.getPosition().x + it->poseidon.getGlobalBounds().width >= WIDTH) {
@@ -812,7 +724,6 @@ void Jeu::boucleDeJeu() {
                                     movingRight = true;
                                 }
                             }
-
                             if (delayAttBoss >= 75) {
                                 Munitions newMunition(
                                     it->poseidon.getPosition().x + it->poseidon.getGlobalBounds().width / 2,
@@ -824,7 +735,6 @@ void Jeu::boucleDeJeu() {
                             for (auto munIt = it->mun.begin(); munIt != it->mun.end();) {
                                 munIt->mun.move(0.f, 5.f);
                                 window.draw(munIt->mun);
-
                                 if (munIt->mun.getGlobalBounds().intersects(persoSprite.getGlobalBounds())) {
                                     personnage.vies -= 1;
                                     munIt = it->mun.erase(munIt);
@@ -836,62 +746,40 @@ void Jeu::boucleDeJeu() {
                                 }
                                 ++munIt;
                             }
-
-                            //it->depEnnemisRight(pose, 1.f);
-
-                            /*it->poseidon.move(1.f,1.f);
-                            if (it->poseidon.getPosition().x > WIDTH) {
-                                it->poseidon.move(-2.f, 1.f);
-                            }
-                            if (it->poseidon.getPosition().x < 0) {
-                                it->poseidon.move(2.f, 1.f);
-                            }
-                            if (it->poseidon.getPosition().y > HEIGHT) {
-                                it->poseidon.move(1.f, 2.f);
-                            }
-                            if (it->poseidon.getPosition().y > HEIGHT/2) {
-                                it->poseidon.move(1.f, -2.f);
-                            }*/
                             if (it->vies == 0) {
                                 it = pose.erase(it);
                                 gameState = GameState::MenuStart;
                                 continue;
                             }
-
                             for (auto itt = personnage.mun.begin(); itt != personnage.mun.end();) {
                                 if (it->poseidon.getGlobalBounds().intersects(itt->mun.getGlobalBounds())) {
-                                    cout << it->vies;
                                     itt = personnage.mun.erase(itt);
                                     it->vies -= 1;
                                     personnage.score += 1;
                                     continue;
                                 }
-
                                 itt++;
                             }
                             it++;
                         }
                     }
                 }
-
+                //-------------------------------------------afficher tous les PowerUps-----------------------------------
                 for (auto it = power1.begin(); it != power1.end();) {
                     window.draw(it->powerUp);
                     it->powerUp.move(0, 2.5f);
-
                     if (it->powerUp.getGlobalBounds().intersects(persoSprite.getGlobalBounds())) { personnage.setMunitions(50); it = power1.erase(it); continue; }
                     it++;
                 }
                 for (auto it = power2.begin(); it != power2.end();) {
                     window.draw(it->powerUp);
                     it->powerUp.move(0, 2.5f);
-
                     if (it->powerUp.getGlobalBounds().intersects(persoSprite.getGlobalBounds())) { enAttaqueMax = 1; it = power2.erase(it); continue; }
                     it++;
                 }
                 for (auto it = power3.begin(); it != power3.end();) {
                     window.draw(it->powerUp);
                     it->powerUp.move(0, 2.5f);
-
                     if (it->powerUp.getGlobalBounds().intersects(persoSprite.getGlobalBounds())) {
                         personnage.vies = 3;
                         it = power3.erase(it);
@@ -899,8 +787,8 @@ void Jeu::boucleDeJeu() {
                     }
                     it++;
                 }
+                //-------------------------------------------afficher tous les PowerUps-----------------------------------
                 window.draw(viesSprite);
-
                 moveBg(bg2Sprite, 0.0f, -0.5f);
                 if (bg2Sprite.getPosition().y > 0) bg2Sprite.setPosition(Vector2f(0, -HEIGHT));
                 moveBg(bg3Sprite, 0.0f, -2.0f);
