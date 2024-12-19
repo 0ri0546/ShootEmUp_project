@@ -40,8 +40,9 @@ private:
 
     Mouse mouse;
     Personnage personnage;
+    Color couleurAvecOpacite = Color(255, 255, 255, 220);
+
     int enAttaque = 0;
-    
     int ultime = 0;
     int enAttaqueMax=20;
     bool firstDep = true;
@@ -52,10 +53,9 @@ private:
     bool level5ok = false;
     bool movingRight = true;
     int delayAttBoss = 0;
-    Color couleurAvecOpacite = Color(255, 255, 255, 220);
 public:
-    int enAttaquePerso = 0;
     Jeu(const int score);
+    int enAttaquePerso = 0;
     void boucleDeJeu();
     void resize(Texture& texture, Sprite& sprite, float scaleX, float scaleY);
     void moveBg(Sprite& sprite, float speedX, float speedY);

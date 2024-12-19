@@ -3,8 +3,6 @@
 using namespace std;
 
 Munitions::Munitions(float posX, float posY) {
-    
-    
     mun.setPosition(posX + TAILLEX / 2, posY);
     mun.setScale(Vector2f(1.5f, 1.5f));
     speed = 1.f;

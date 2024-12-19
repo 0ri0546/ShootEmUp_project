@@ -15,7 +15,6 @@ class Hermes {
     int vies = 1;
     int celerite = 3;
 
-    
 public:
     void deplacement();
     void attaque(RectangleShape& rectangle, RenderWindow& window, int spriteAnimation, Texture& texture);
@@ -32,9 +31,7 @@ public:
         hermes.setTexture(texture);
         hermes.setPosition(posX, posY);
         hermes.setScale(sf::Vector2f(0.2f, 0.2f));
-        
         speed = 5.f;
-        
     };
     void creerEnnemis(vector<Hermes>& hermes, int ennemis, float x, float y);
     void patern( vector<Hermes>& hermes, float x, float y, float moveToX, float moveToY, float velocity);

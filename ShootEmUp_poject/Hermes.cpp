@@ -1,29 +1,18 @@
 #include "Hermes.hpp"
 
 void Hermes::deplacement() {
-    //les ennemis se deplacent en 'X'
 }
 void Hermes::attaque(RectangleShape& rectangle, RenderWindow& window, int spriteAnimation, Texture& texture) {
-    
     mun.push_back(Munitions(hermes.getPosition().x, hermes.getPosition().y));
-
     for (auto it = mun.begin(); it != mun.end(); ) {
-
-
         window.draw(it->mun);
         it->mun.move(0.f, 10.f);
-
         if (it->mun.getPosition().y + texture.getSize().y + 20 < 0) { it = mun.erase(it); }
         else { ++it; }
     }
 }
-void Hermes::incr_score() {
-    //retourne true si vies = 0
-    //detruit l'ennemi
-}
-void Hermes::drop() {
-    //un pourcentage de chance de drop un powerUp
-}
+void Hermes::incr_score() {}
+void Hermes::drop() {}
 
 void Hermes::depEnnemisRight(vector<Hermes>& ennemis, int velocity) { //deplace les ennemis dans le vecteur hermes en diagonale, et rebondi sur tous les wall
     static vector<int> directions(ennemis.size(), 1);
