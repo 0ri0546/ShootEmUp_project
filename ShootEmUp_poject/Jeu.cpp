@@ -790,7 +790,10 @@ void Jeu::boucleDeJeu() {
                     window.draw(it->powerUp);
                     it->powerUp.move(0, 2.5f);
 
-                    if (it->powerUp.getGlobalBounds().intersects(persoSprite.getGlobalBounds())) { enAttaqueMax = 1; it = power3.erase(it); continue; }
+                    if (it->powerUp.getGlobalBounds().intersects(persoSprite.getGlobalBounds())) { 
+                        personnage.vies = 3; 
+                        it = power3.erase(it); 
+                        continue; }
                     it++;
                 }
                 //--------------------------Deplacemment des ennemis----------------------------------------------------------------------
